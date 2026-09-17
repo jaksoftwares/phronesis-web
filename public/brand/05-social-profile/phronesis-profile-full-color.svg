@@ -1,0 +1,141 @@
+
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Safe zone padding: Seal scaled by 2.2 = 880px width. Center is 540. Top left is 100. Translate 100/2.2 = 45.45 -->
+  <g transform="scale(2.2) translate(45.45, 45.45)">
+    
+
+  <!-- Outer Rings (Adjusted for perfect text spacing) -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="#163A5F" stroke-width="4"/>
+  <circle cx="200" cy="200" r="175" fill="none" stroke="#163A5F" stroke-width="1.5"/>
+  <circle cx="200" cy="200" r="130" fill="none" stroke="#163A5F" stroke-width="1.5"/>
+  
+  <!-- Geometry-driven text arcs to completely bypass the librsvg textPath bug -->
+  <text x="52.69631149091711" y="160.53009562186554" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-75, 52.69631149091711, 160.53009562186554)">P</text>
+<text x="59.5137751762789" y="140.67150233843026" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-67.10526315789474, 59.5137751762789, 140.67150233843026)">H</text>
+<text x="68.99427195859252" y="121.93753001383581" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-59.21052631578948, 68.99427195859252, 121.93753001383581)">R</text>
+<text x="80.95809114566354" y="104.68329665627408" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-51.31578947368422, 80.95809114566354, 104.68329665627408)">O</text>
+<text x="95.17844860615754" y="89.23587059256032" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-43.42105263157896, 95.17844860615754, 89.23587059256032)">N</text>
+<text x="111.38578565120442" y="75.88807061629525" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-35.526315789473685, 111.38578565120442, 75.88807061629525)">E</text>
+<text x="129.27287874327538" y="64.89291536438006" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-27.631578947368425, 129.27287874327538, 64.89291536438006)">S</text>
+<text x="148.5006631735548" y="56.458827138565084" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-19.73684210526315, 148.5006631735548, 56.458827138565084)">I</text>
+<text x="168.7046603151658" y="50.74568108757845" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(-11.84210526315789, 168.7046603151658, 50.74568108757845)">S</text>
+<text x="210.49811338167638" y="47.86177464086987" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(3.94736842105263, 210.49811338167638, 47.86177464086987)">H</text>
+<text x="231.29533968483423" y="50.74568108757845" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(11.84210526315789, 231.29533968483423, 50.74568108757845)">O</text>
+<text x="251.49933682644522" y="56.458827138565084" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(19.73684210526315, 251.49933682644522, 56.458827138565084)">M</text>
+<text x="270.7271212567247" y="64.89291536438009" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(27.63157894736841, 270.7271212567247, 64.89291536438009)">E</text>
+<text x="288.6142143487956" y="75.88807061629528" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(35.526315789473685, 288.6142143487956, 75.88807061629528)">S</text>
+<text x="304.8215513938424" y="89.23587059256029" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(43.421052631578945, 304.8215513938424, 89.23587059256029)">C</text>
+<text x="319.0419088543364" y="104.68329665627402" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(51.315789473684205, 319.0419088543364, 104.68329665627402)">H</text>
+<text x="331.00572804140745" y="121.93753001383585" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(59.21052631578948, 331.00572804140745, 121.93753001383585)">O</text>
+<text x="340.48622482372116" y="140.6715023384303" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(67.10526315789474, 340.48622482372116, 140.6715023384303)">O</text>
+<text x="347.3036885090829" y="160.5300956218656" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="28" text-anchor="middle" dominant-baseline="middle" transform="rotate(75, 347.3036885090829, 160.5300956218656)">L</text>
+
+  <text x="61.78806247691088" y="264.4492849154567" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(65, 61.78806247691088, 264.4492849154567)">G</text>
+<text x="70.45045446200328" y="280.45598331322856" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(58.15789473684211, 70.45045446200328, 280.45598331322856)">E</text>
+<text x="80.95809114566354" y="295.3167033437259" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(51.31578947368422, 80.95809114566354, 295.3167033437259)">N</text>
+<text x="93.16130653867903" y="308.8197756819867" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(44.4736842105263, 93.16130653867903, 308.8197756819867)">E</text>
+<text x="106.88628360127588" y="320.7728687181768" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(37.631578947368425, 106.88628360127588, 320.7728687181768)">S</text>
+<text x="121.93753001383588" y="331.00572804140756" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(30.78947368421052, 121.93753001383588, 331.00572804140756)">I</text>
+<text x="138.10066268042237" y="339.37260146598805" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(23.94736842105263, 138.10066268042237, 339.37260146598805)">S</text>
+<text x="172.82914753903552" y="350.05997060023867" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(10.26315789473685, 172.82914753903552, 350.05997060023867)">O</text>
+<text x="190.89984301645535" y="352.2282402935633" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(3.421052631578945, 190.89984301645535, 352.2282402935633)">F</text>
+<text x="227.17085246096443" y="350.05997060023867" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-10.263157894736835, 227.17085246096443, 350.05997060023867)">K</text>
+<text x="244.85453869608273" y="345.75431505914884" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-17.10526315789474, 244.85453869608273, 345.75431505914884)">N</text>
+<text x="261.8993373195776" y="339.37260146598805" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-23.94736842105263, 261.8993373195776, 339.37260146598805)">O</text>
+<text x="278.06246998616416" y="331.00572804140745" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-30.78947368421052, 278.06246998616416, 331.00572804140745)">W</text>
+<text x="293.11371639872414" y="320.7728687181768" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-37.631578947368425, 293.11371639872414, 320.7728687181768)">L</text>
+<text x="306.838693461321" y="308.8197756819866" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-44.473684210526315, 306.838693461321, 308.8197756819866)">E</text>
+<text x="319.0419088543364" y="295.316703343726" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-51.315789473684205, 319.0419088543364, 295.316703343726)">D</text>
+<text x="329.54954553799666" y="280.4559833132286" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-58.15789473684211, 329.54954553799666, 280.4559833132286)">G</text>
+<text x="338.2119375230891" y="264.44928491545664" fill="#163A5F" font-family="Segoe UI, Arial, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(-65, 338.2119375230891, 264.44928491545664)">E</text>
+
+
+  <!-- Decorative Stars pinned exactly at the path anchors -->
+  <g fill="#163A5F">
+    <!-- Left Star -->
+    <polygon points="0,-8 2,-2 8,-2 3,2 5,8 0,5 -5,8 -3,2 -8,-2 -2,-2" transform="translate(47.5, 200)" />
+    <!-- Right Star -->
+    <polygon points="0,-8 2,-2 8,-2 3,2 5,8 0,5 -5,8 -3,2 -8,-2 -2,-2" transform="translate(352.5, 200)" />
+  </g>
+
+  <!-- Center Emblem -->
+  
+  <line x1="200" y1="120" x2="200" y2="75" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="220.70552360820164" y1="122.72593389687454" x2="232.3523806378151" y2="79.25927171386645" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="240" y1="130.7179676972449" x2="262.5" y2="91.74682452694516" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="256.5685424949238" y1="143.4314575050762" x2="288.3883476483184" y2="111.61165235168156" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="269.28203230275506" y1="160" x2="308.25317547305485" y2="137.5" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="277.27406610312545" y1="179.29447639179836" x2="320.74072828613356" y2="167.6476193621849" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="280" y1="200" x2="325" y2="200" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="277.27406610312545" y1="220.70552360820167" x2="320.74072828613356" y2="232.35238063781512" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="122.72593389687454" y1="220.70552360820164" x2="79.25927171386645" y2="232.3523806378151" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="120" y1="200.00000000000003" x2="75" y2="200.00000000000003" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="122.72593389687455" y1="179.2944763917983" x2="79.25927171386647" y2="167.64761936218486" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="130.71796769724492" y1="160" x2="91.74682452694518" y2="137.5" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="143.4314575050762" y1="143.4314575050762" x2="111.61165235168154" y2="111.61165235168158" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="159.99999999999997" y1="130.71796769724494" x2="137.49999999999994" y2="91.7468245269452" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="179.29447639179836" y1="122.72593389687454" x2="167.6476193621849" y2="79.25927171386645" stroke="#D5A63A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+
+  
+  <g>
+    <!-- Bottom Book -->
+    <rect x="110" y="275" width="180" height="16" fill="#163A5F" rx="3" />
+    <rect x="110" y="279" width="180" height="5" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Middle Book -->
+    <rect x="130" y="255" width="140" height="16" fill="#163A5F" rx="3" />
+    <rect x="130" y="259" width="140" height="5" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Top Book -->
+    <rect x="150" y="235" width="100" height="16" fill="#163A5F" rx="3" />
+    <rect x="150" y="239" width="100" height="5" fill="#ffffff" opacity="0.7"/>
+  </g>
+
+  
+  <!-- Main Trunk and primary branches originating perfectly from x=200 -->
+  <path d="M200 235 C190 190, 180 170, 165 135" stroke="#197C7A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M200 235 C210 190, 220 170, 235 135" stroke="#197C7A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M200 235 L200 110" stroke="#197C7A" stroke-width="5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Secondary Branches -->
+  <path d="M185 180 C175 165, 155 150, 130 120" stroke="#197C7A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M215 180 C225 165, 245 150, 270 120" stroke="#197C7A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <path d="M195 150 C185 140, 175 125, 155 95" stroke="#197C7A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M205 150 C215 140, 225 125, 245 95" stroke="#197C7A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Elegant Open Book Leaves -->
+  <g fill="none" stroke="#197C7A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Center Top -->
+    <path d="M188 100 Q200 88 200 105 Q200 88 212 100 L200 110 Z" fill="#197C7A" />
+    <!-- Center High -->
+    <path d="M191 80 Q200 71 200 85 Q200 71 209 80 L200 90 Z" fill="#197C7A" />
+    
+    <!-- Left Branches -->
+    <g transform="translate(130, 120) rotate(-30) scale(1.1)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#197C7A" />
+    </g>
+    <g transform="translate(165, 135) rotate(-20) scale(1.0)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#197C7A" />
+    </g>
+    <g transform="translate(155, 95) rotate(-25) scale(0.9)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#197C7A" />
+    </g>
+
+    <!-- Right Branches -->
+    <g transform="translate(270, 120) rotate(30) scale(1.1)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#197C7A" />
+    </g>
+    <g transform="translate(235, 135) rotate(20) scale(1.0)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#197C7A" />
+    </g>
+    <g transform="translate(245, 95) rotate(25) scale(0.9)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#197C7A" />
+    </g>
+  </g>
+
+
+
+
+  </g>
+</svg>

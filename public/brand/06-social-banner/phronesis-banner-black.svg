@@ -1,0 +1,96 @@
+
+<svg width="1500" height="500" viewBox="0 0 1500 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Solid Background -->
+  <rect width="1500" height="500" fill="#FFFFFF"/>
+  
+  <!-- The Hero Graphic: Giant Emblem bleeding off the right edge -->
+  <g transform="scale(3.5) translate(300, -20)" opacity="0.12">
+    
+  <line x1="200" y1="120" x2="200" y2="75" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="220.70552360820164" y1="122.72593389687454" x2="232.3523806378151" y2="79.25927171386645" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="240" y1="130.7179676972449" x2="262.5" y2="91.74682452694516" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="256.5685424949238" y1="143.4314575050762" x2="288.3883476483184" y2="111.61165235168156" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="269.28203230275506" y1="160" x2="308.25317547305485" y2="137.5" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="277.27406610312545" y1="179.29447639179836" x2="320.74072828613356" y2="167.6476193621849" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="280" y1="200" x2="325" y2="200" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="277.27406610312545" y1="220.70552360820167" x2="320.74072828613356" y2="232.35238063781512" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="122.72593389687454" y1="220.70552360820164" x2="79.25927171386645" y2="232.3523806378151" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="120" y1="200.00000000000003" x2="75" y2="200.00000000000003" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="122.72593389687455" y1="179.2944763917983" x2="79.25927171386647" y2="167.64761936218486" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="130.71796769724492" y1="160" x2="91.74682452694518" y2="137.5" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="143.4314575050762" y1="143.4314575050762" x2="111.61165235168154" y2="111.61165235168158" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="159.99999999999997" y1="130.71796769724494" x2="137.49999999999994" y2="91.7468245269452" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<line x1="179.29447639179836" y1="122.72593389687454" x2="167.6476193621849" y2="79.25927171386645" stroke="#17212B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+
+  
+  <g>
+    <!-- Bottom Book -->
+    <rect x="110" y="275" width="180" height="16" fill="#17212B" rx="3" />
+    <rect x="110" y="279" width="180" height="5" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Middle Book -->
+    <rect x="130" y="255" width="140" height="16" fill="#17212B" rx="3" />
+    <rect x="130" y="259" width="140" height="5" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Top Book -->
+    <rect x="150" y="235" width="100" height="16" fill="#17212B" rx="3" />
+    <rect x="150" y="239" width="100" height="5" fill="#ffffff" opacity="0.7"/>
+  </g>
+
+  
+  <!-- Main Trunk and primary branches originating perfectly from x=200 -->
+  <path d="M200 235 C190 190, 180 170, 165 135" stroke="#17212B" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M200 235 C210 190, 220 170, 235 135" stroke="#17212B" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M200 235 L200 110" stroke="#17212B" stroke-width="5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Secondary Branches -->
+  <path d="M185 180 C175 165, 155 150, 130 120" stroke="#17212B" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M215 180 C225 165, 245 150, 270 120" stroke="#17212B" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <path d="M195 150 C185 140, 175 125, 155 95" stroke="#17212B" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M205 150 C215 140, 225 125, 245 95" stroke="#17212B" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Elegant Open Book Leaves -->
+  <g fill="none" stroke="#17212B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Center Top -->
+    <path d="M188 100 Q200 88 200 105 Q200 88 212 100 L200 110 Z" fill="#17212B" />
+    <!-- Center High -->
+    <path d="M191 80 Q200 71 200 85 Q200 71 209 80 L200 90 Z" fill="#17212B" />
+    
+    <!-- Left Branches -->
+    <g transform="translate(130, 120) rotate(-30) scale(1.1)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#17212B" />
+    </g>
+    <g transform="translate(165, 135) rotate(-20) scale(1.0)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#17212B" />
+    </g>
+    <g transform="translate(155, 95) rotate(-25) scale(0.9)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#17212B" />
+    </g>
+
+    <!-- Right Branches -->
+    <g transform="translate(270, 120) rotate(30) scale(1.1)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#17212B" />
+    </g>
+    <g transform="translate(235, 135) rotate(20) scale(1.0)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#17212B" />
+    </g>
+    <g transform="translate(245, 95) rotate(25) scale(0.9)">
+      <path d="M-12 -12 Q0 -24 0 -5 Q0 -24 12 -12 L0 0 Z" fill="#17212B" />
+    </g>
+  </g>
+
+
+  </g>
+
+  <!-- The Typography Layout -->
+  <g transform="translate(100, 130)">
+    <text x="0" y="60" fill="#17212B" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="95" letter-spacing="4">PHRONESIS</text>
+    <text x="5" y="150" fill="#17212B" font-family="Segoe UI, Arial, sans-serif" font-weight="500" font-size="55" letter-spacing="22">HOMESCHOOL</text>
+    
+    <!-- Delicate gold dividing line -->
+    <line x1="5" y1="190" x2="200" y2="190" stroke="#17212B" stroke-width="4" stroke-linecap="round"/>
+    
+    <text x="5" y="250" fill="#17212B" font-family="Georgia, Times New Roman, serif" font-style="italic" font-weight="400" font-size="42" letter-spacing="2">Genesis of Knowledge</text>
+  </g>
+</svg>
