@@ -16,8 +16,38 @@ const sourceSerif4 = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "Phronesis Homeschool Platform",
-  description: "Institutional grade digital education platform",
+  title: {
+    template: "%s | Phronesis Homeschool",
+    default: "Phronesis Homeschool | Genesis of Knowledge",
+  },
+  description: "A comprehensive, secure, and professional home-schooling platform for Grades 7–12. Access curated CBC revision materials, verified expert teachers, and live virtual classes.",
+  openGraph: {
+    title: "Phronesis Homeschool | Genesis of Knowledge",
+    description: "A comprehensive, secure, and professional home-schooling platform for Grades 7–12.",
+    url: "https://phronesis.example.com",
+    siteName: "Phronesis Homeschool",
+    images: [
+      {
+        url: "/brand/06-social-banner/phronesis-banner-full-color.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Phronesis Homeschool Banner",
+      },
+    ],
+    locale: "en_KE",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Phronesis Homeschool | Genesis of Knowledge",
+    description: "A comprehensive, secure, and professional home-schooling platform for Grades 7–12.",
+    images: ["/brand/06-social-banner/phronesis-banner-full-color.jpg"],
+  },
+  icons: {
+    icon: "/brand/05-social-profile/phronesis-profile-full-color.png",
+    shortcut: "/brand/05-social-profile/phronesis-profile-full-color.png",
+    apple: "/brand/05-social-profile/phronesis-profile-full-color.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
