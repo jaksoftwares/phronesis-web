@@ -1,0 +1,70 @@
+# Phronesis-Web: Holistic Frontend Implementation Plan (Final)
+
+This comprehensive master plan maps the entire backend blueprint (`system-modules.md`) directly to our frontend architecture (`phronesis-web`). It establishes sequential milestones for building the entire platform, covering all 11 phases without cutting scope for an MVP.
+
+---
+
+## 🏗️ Phase 0: Frontend Foundation (M00 - M02)
+*Status: In Progress*
+- **Milestone 0.1:** Establish Next.js App Router structure (`(public)`, `(auth)`, `(learner)`, `(guardian)`, `(teacher)`, `(admin)` route groups) and the Public Landing Page (Completed).
+- **Milestone 0.2:** Configure global state management (Zustand) and API fetching (Axios/TanStack Query).
+- **Milestone 0.3:** Build a generic, brand-aligned UI component library (Buttons, Inputs, Modals, Cards, Data Tables).
+
+## 🔐 Phase 1: Identity & Authentication (M03 - M05)
+*Strategy: Isolated Portals for Role Separation*
+- **Milestone 1.1:** Build separate, branded Authentication Portals to prevent role confusion:
+  - `/auth/learner` (Learner Login/Register)
+  - `/auth/guardian` (Guardian/Parent Login/Register)
+  - `/auth/teacher` (Teacher Login/Application)
+  - `/auth/admin` (Staff/Admin Login)
+- **Milestone 1.2:** Implement JWT/Session handling and Next.js Middleware to protect routes securely based on these isolated roles.
+- **Milestone 1.3:** Build Administrative layout shells (Sidebar, Header, Profile dropdown) for staff members.
+
+## 👥 Phase 2: User Portals (M06 - M08)
+- **Milestone 2.1 - Learner Portal:** Create the Learner Dashboard (`/(learner)/dashboard`), managing profile data and learning schedules.
+- **Milestone 2.2 - Guardian Portal:** Create the Guardian Dashboard (`/(guardian)/dashboard`) allowing parents to link to their learners, monitor progress, and manage subscriptions on their behalf.
+- **Milestone 2.3 - Teacher Onboarding:** Build the rigorous Teacher Application multi-step flow (Profile, credentials, subjects, document uploads).
+- **Milestone 2.4 - Teacher Portal:** Create the Teacher Dashboard (`/(teacher)/dashboard`), displaying verification status and basic profile settings.
+
+## 📚 Phase 3 & 4: Academic Core & Content (M09 - M14)
+- **Milestone 3.1 - Content Catalog:** Build the "Explore Curriculum" UI, allowing learners to search and filter by Grade, Subject, and Topic.
+- **Milestone 3.2 - Secure Viewer:** Implement UI components for consuming content (PDFs, Videos, Animations) with protections against unauthorized downloads.
+- **Milestone 3.3 - Content Admin:** Build the Content Manager UI for uploading resources and managing the approval state machine (Draft -> Under Review -> Approved -> Published).
+
+## 🧠 Phase 5: Learning & Assessments (M15 - M17)
+- **Milestone 5.1 - Quiz Interface:** Build the interactive assessment UI for topical questions and mock exams (timers, auto-grading, multiple choice).
+- **Milestone 5.2 - Results & Marking:** Create the post-exam review UI, displaying marking schemes and feedback.
+- **Milestone 5.3 - Progress Tracking:** Implement charts and activity timelines on the Learner and Guardian Dashboards.
+
+## 💳 Phase 6: Commerce & Subscriptions (M18 - M20)
+- **Milestone 6.1 - Pricing Page:** Build a clean tiered pricing UI for plans (1 Day, 1 Month, 1 Year).
+- **Milestone 6.2 - Checkout Flow:** Implement the payment gateway UI (M-Pesa, Card) and handle success/failure webhooks (primarily accessed via Guardian or adult Learner portals).
+- **Milestone 6.3 - Entitlements & Invoices:** Build the user-facing "Billing" tab to view subscription status and download invoices.
+
+## 🎥 Phase 7: Virtual Tuition (M21 - M24)
+- **Milestone 7.1 - Class Directory & Booking:** Build the UI for learners/guardians to browse, check availability, and book virtual classes.
+- **Milestone 7.2 - Scheduling & Calendar:** Implement calendar views for Learners and Teachers.
+- **Milestone 7.3 - Live Classroom:** Integrate the secure video-conferencing UI (WebRTC or managed iframe) with attendance tracking.
+
+## 🤝 Phase 8: Collaboration & Support (M25 - M27)
+- **Milestone 8.1 - Teacher Collaboration:** Build the workspace for teachers to submit their own resources and receive feedback from reviewers.
+- **Milestone 8.2 - Notifications:** Implement a global notification bell and dropdown for reminders, booking alerts, and announcements across all portals.
+- **Milestone 8.3 - Helpdesk:** Build the support ticketing UI for users to report issues and for staff to manage them.
+
+## ⚙️ Phase 9: Operations & QA (M28 - M33)
+- **Milestone 9.1 - Master Admin Dashboard:** Build comprehensive reporting UI for Revenue, User Growth, Content stats, and Class attendance.
+- **Milestone 9.2 - Safeguarding & Audit UI:** Build tools for admins to review flagged content, audit access logs, and manage user suspensions.
+- **Milestone 9.3 - Platform Configuration:** UI to manage subscription plans, curriculum taxonomy, and system settings.
+
+## 📱 Phase 10: Mobile Experience (M34)
+- **Milestone 10.1 - PWA Optimization:** Refine the entire web application to ensure flawless responsive behavior on mobile devices.
+- **Milestone 10.2 - Offline Capabilities:** Implement Service Workers for caching essential UI shells and offline indicators.
+
+## 🚀 Phase 11: Advanced Capabilities (M35 - M36)
+- **Milestone 11.1 - AI Recommendations:** Build UI elements to surface "Recommended Resources" or "Weak Topic Alerts" based on backend analytics.
+- **Milestone 11.2 - Global Expansion:** Implement multi-language toggles and multi-currency pricing displays for international markets.
+
+---
+
+### Execution Strategy
+To guarantee a solid architecture, we will execute this plan **strictly sequentially**, starting with Phase 1. We will not begin complex workflows (like Content Approval or Video Classes) until the Authentication and Authorization layers (Phase 1) are rock solid.
