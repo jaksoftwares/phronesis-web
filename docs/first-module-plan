@@ -1,0 +1,128 @@
+# Phronesis Web Integration - Module 1: UI Foundation & Auth Architecture (Final Blueprint)
+
+This is the comprehensive, engineering-grade blueprint for integrating the `phronesis-web` frontend with the `phronesis-platform` backend for Phase 1 (Identity & Authentication). 
+
+We are adopting a pixel-perfect approach based on `PHRONESIS-BRAND-GUIDELINES` on the frontend, and we are strictly adhering to an **End-to-End Functional Strategy**—meaning there will be **no mock services**. Any backend endpoint required by the frontend that is currently missing or incomplete will be fully implemented in C# as part of this module.
+
+## User Review Required
+
+> [!IMPORTANT]
+> Please review this finalized architecture which now includes the full-stack backend implementations. Once approved, we will begin execution.
+
+---
+
+## 1. Backend Implementation (Unblocking the 501s)
+
+I have identified that `AuthController.cs` currently has several endpoints returning `501 Not Implemented`. Before or concurrently with building the frontend, we will implement the actual business logic for these features in `phronesis-platform`:
+
+### 1.1 Password Reset Flow
+- **`POST /api/v1/auth/request-password-reset`**:
+  - **Backend Task:** Implement logic in `IAuthService` to generate a secure, time-limited reset token for the given email. We will integrate with an `IEmailService` interface to send the actual reset link.
+- **`POST /api/v1/auth/reset-password`**:
+  - **Backend Task:** Implement the endpoint to receive the `Email`, `Token`, and `NewPassword`. Validate the token, hash the new password, and update the database.
+
+### 1.2 Email Verification Flow
+- **`POST /api/v1/auth/resend-email-verification`**:
+  - **Backend Task:** Generate a secure verification token and send it via the email service.
+- **`POST /api/v1/auth/verify-email`**:
+  - **Backend Task:** Validate the incoming token and update the user's `EmailConfirmed` status in the database.
+
+*Note: We will wire up a foundational `IEmailService` (e.g., using SmtpClient or an abstraction for SendGrid/Mailgun) so that the emails actually fire and tokens can be retrieved.*
+
+---
+
+## 2. Architectural Design & User Experience (UX)
+
+We will implement an "Institutional Premium" feel.
+
+- **Layout Structure (`AuthLayout.tsx`):** A modern, responsive split-screen layout.
+  - **Left Side (Visual/Brand):** A static or subtly animated hero image representing the "Genesis of Knowledge", featuring the `Deep Blue` (`#163A5F`) and `Knowledge Gold` (`#D5A63A`) color palette, alongside the master seal and the motto rendered in *Georgia* italic.
+  - **Right Side (Interaction):** A clean, `Pristine White` or `Cloud Gray` form container centered vertically and horizontally.
+- **Form Components:** 
+  - Floating labels or cleanly aligned top-labels using the `Inter` font.
+  - Strict adherence to `var(--radius-input)` (8px) for text fields and buttons.
+  - Interactive states: Focus rings using a soft opacity of `Deep Blue`.
+  - Inline, real-time validation (e.g., password strength meters, email format checking) using Zod.
+
+---
+
+## 3. Comprehensive Routing Map
+
+We will utilize Next.js App Router for strict role-based separation.
+
+### Learner Portal
+- **`/(auth)/learner/login/page.tsx`**: Learner Login Form.
+- **`/(auth)/learner/register/page.tsx`**: Learner Registration.
+
+### Guardian Portal
+- **`/(auth)/guardian/login/page.tsx`**: Guardian Login Form.
+- **`/(auth)/guardian/register/page.tsx`**: Guardian Registration.
+
+### Teacher Portal
+- **`/(auth)/teacher/login/page.tsx`**: Teacher Login Form.
+- **`/(auth)/teacher/apply/page.tsx`**: Initial step for the Teacher application process.
+
+### Staff/Admin Portal
+- **`/(auth)/admin/login/page.tsx`**: Secure Staff/Admin Login gateway.
+
+### Shared Authentication Routes
+- **`/(auth)/shared/forgot-password/page.tsx`**: Input email to request a reset link.
+- **`/(auth)/shared/reset-password/page.tsx`**: Input new password (requires token from URL).
+- **`/(auth)/shared/verify-email/page.tsx`**: Display success/failure of email verification based on URL token.
+
+---
+
+## 4. Data Flow & Field Mapping
+
+All forms will use `react-hook-form` resolved by `zod` schemas that strictly map to the C# DTOs found in `Phronesis.Application`.
+
+### 4.1 Registration Forms (`RegisterRequest.cs`)
+- **Fields:** `FirstName`, `LastName`, `Email`, `Password`.
+- **Endpoint:** `POST /api/v1/auth/register`
+- **On Success:** Redirect to `/auth/shared/verify-email`.
+
+### 4.2 Login Forms (`LoginRequest.cs`)
+- **Fields:** `Email`, `Password`.
+- **Endpoint:** `POST /api/v1/auth/login`
+- **On Success:** Store `AccessToken` in memory (Zustand) and `RefreshToken` via HttpOnly cookies. Redirect to `/[role]/dashboard`.
+
+### 4.3 Forgot & Reset Password (Fully Functional)
+- **Forgot Password Fields:** `Email` -> Triggers backend email dispatch.
+- **Reset Password Fields:** `NewPassword`, `ConfirmPassword` -> Sends payload + token to backend.
+
+---
+
+## 5. Frontend Infrastructure & Security Core
+
+### [NEW] `src/lib/api/axios.ts`
+- **Request Interceptor:** Automatically attach the `AccessToken`.
+- **Response Interceptor:** Detect `401 Unauthorized`. If triggered, automatically call `POST /api/v1/auth/refresh`.
+
+### [NEW] `src/store/authStore.ts`
+- A Zustand store configured with `persist` middleware.
+- **State:** `user`, `accessToken`, `role`, `isAuthenticated`.
+
+### [NEW] `src/middleware.ts`
+- Next.js Edge Middleware protecting `/(learner)`, `/(guardian)`, `/(teacher)`, `/(admin)` route groups.
+
+### [NEW] `src/components/ui/*`
+- Build out the custom UI primitives (`Button`, `Input`, `PasswordStrengthMeter`) adhering to the brand guidelines.
+
+---
+
+## Verification Plan
+
+### Backend Verification
+- Execute `dotnet test` on the auth services.
+- Manually trigger `request-password-reset` via Swagger or Postman and confirm a valid token is generated and the email service is invoked.
+
+### Frontend Verification
+- Run `npm run lint` and `tsc --noEmit`.
+- Visually verify the Auth Layout matches the `Deep Blue` and `Knowledge Gold` color scheme.
+- Perform a complete, real end-to-end flow: 
+  1. Register a Learner.
+  2. Verify the email using the actual token.
+  3. Log in.
+  4. Request a password reset.
+  5. Reset the password with the emailed token and log in again.
+

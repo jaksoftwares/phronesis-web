@@ -1,0 +1,106 @@
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import api from '@/lib/api/axios';
+import { useAuthStore } from '@/store/authStore';
+import { FloatingLabelInput } from '@/components/ui/FloatingLabelInput';
+import { PrimaryButton } from '@/components/ui/PrimaryButton';
+
+const loginSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+export default function GuardianLogin() {
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const [globalError, setGlobalError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
+    setGlobalError(null);
+    try {
+      const response = await api.post('/auth/login', data);
+      const authData = response.data?.data;
+      
+      if (authData?.accessToken) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${authData.accessToken}`;
+        const meResponse = await api.get('/auth/me');
+        const user = meResponse.data?.data;
+        
+        if (user) {
+          setAuth(user, authData.accessToken);
+          router.push('/guardian/dashboard');
+        }
+      }
+    } catch (error: any) {
+      setGlobalError(error.response?.data?.message || 'Failed to login. Please try again.');
+    }
+  };
+
+  return (
+    <div className="w-full">
+      <div className="mb-8">
+        <h2 className="h2 text-phronesis-blue mb-2">Guardian Access</h2>
+        <p className="text-slate-500">Sign in to manage and monitor your dependents' education.</p>
+      </div>
+
+      {globalError && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[var(--radius-input)] text-red-600 text-sm">
+          {globalError}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+        <FloatingLabelInput
+          label="Email Address"
+          type="email"
+          autoComplete="email"
+          error={errors.email?.message}
+          {...register('email')}
+        />
+
+        <FloatingLabelInput
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          error={errors.password?.message}
+          {...register('password')}
+        />
+
+        <div className="flex justify-end pt-1 pb-3">
+           <Link href="/shared/forgot-password" className="text-sm text-phronesis-blue hover:text-phronesis-gold transition-colors font-medium">
+             Forgot password?
+           </Link>
+        </div>
+
+        <div className="pt-4">
+          <PrimaryButton type="submit" isLoading={isSubmitting} variant="secondary">
+            Sign In as Guardian
+          </PrimaryButton>
+        </div>
+      </form>
+
+      <div className="mt-8 text-center text-slate-500 text-sm">
+        Don't have an account?{' '}
+        <Link href="/guardian/register" className="text-phronesis-blue hover:text-phronesis-gold font-semibold transition-colors">
+          Register here
+        </Link>
+      </div>
+    </div>
+  );
+}

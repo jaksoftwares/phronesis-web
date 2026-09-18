@@ -63,13 +63,13 @@ export function PublicHeader() {
         {/* CTAs */}
         <div className="flex items-center gap-4">
           <Link 
-            href="/login" 
+            href="/learner/login"
             className="hidden md:flex px-6 py-2 border border-mist text-ink font-medium rounded-input hover:bg-cloud transition-colors shadow-sm"
           >
             Sign In
           </Link>
           <Link 
-            href="/register" 
+            href="/learner/register"
             className="px-6 py-2 bg-phronesis-blue text-white font-medium rounded-input hover:bg-phronesis-blue/90 transition-colors shadow-institutional"
           >
             Enroll Now

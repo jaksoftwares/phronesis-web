@@ -36,7 +36,7 @@ export function HeroSection() {
             
             <div className="flex flex-col sm:flex-row gap-4 pt-2 lg:pt-4">
               <Link 
-                href="/register" 
+                href="/learner/register"
                 className="px-8 py-4 bg-phronesis-blue text-white font-semibold rounded-input hover:bg-phronesis-blue/90 transition-all shadow-institutional hover:shadow-lg text-center"
               >
                 Enroll Now

@@ -16,13 +16,13 @@ export function TerminalCta() {
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <Link 
-            href="/register" 
-            className="w-full sm:w-auto px-10 py-4 bg-phronesis-gold text-ink font-bold rounded-input hover:bg-[#c29631] transition-colors shadow-lg hover:shadow-xl text-lg"
+            href="/learner/register" 
+            className="w-full sm:w-auto px-8 py-4 bg-phronesis-gold text-phronesis-blue font-bold rounded-input hover:bg-white transition-colors shadow-institutional"
           >
-            Register as Learner
+            Start Learning Now
           </Link>
           <Link 
-            href="/teach" 
+            href="/teacher/apply" 
             className="w-full sm:w-auto px-10 py-4 bg-transparent border-2 border-cloud/30 text-white font-bold rounded-input hover:bg-cloud/10 hover:border-cloud transition-colors text-lg"
           >
             Apply to Teach

@@ -39,10 +39,10 @@ export function PublicFooter() {
           <div className="space-y-6">
             <h4 className="font-bold text-white tracking-wide uppercase text-sm">Portals</h4>
             <ul className="space-y-3 text-sm text-mist">
-              <li><Link href="/login?role=learner" className="hover:text-phronesis-teal transition-colors">Learner Portal</Link></li>
-              <li><Link href="/login?role=teacher" className="hover:text-phronesis-teal transition-colors">Teacher Arena</Link></li>
-              <li><Link href="/login?role=guardian" className="hover:text-phronesis-teal transition-colors">Guardian Portal</Link></li>
-              <li><Link href="/teach" className="hover:text-phronesis-teal transition-colors">Teach With Us</Link></li>
+              <li><Link href="/learner/login" className="hover:text-phronesis-teal transition-colors">Learner Portal</Link></li>
+              <li><Link href="/teacher/login" className="hover:text-phronesis-teal transition-colors">Teacher Arena</Link></li>
+              <li><Link href="/guardian/login" className="hover:text-phronesis-teal transition-colors">Guardian Portal</Link></li>
+              <li><Link href="/teacher/apply" className="hover:text-phronesis-teal transition-colors">Teach With Us</Link></li>
             </ul>
           </div>
 
