@@ -22,42 +22,33 @@ const formats = ["svg", "png", "jpg", "pdf"];
 
 export default function BrandAuditDashboard() {
   const [activePalette, setActivePalette] = useState(palettes[0].id);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-[#17212B] text-white' : 'bg-[#F5F7F9] text-[#17212B]'} font-sans`}>
-      <header className={`border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} p-8`}>
+    <div className="min-h-screen bg-cloud text-ink font-sans pb-16">
+      <header className="border-b border-mist p-8 bg-white shadow-sm">
         <div className="container mx-auto flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Phronesis Brand Asset Library</h1>
-            <p className={`mt-2 ${isDarkMode ? 'text-gray-400' : 'text-[#52616B]'}`}>
+            <h1 className="h3 text-phronesis-blue">Phronesis Brand Asset Library</h1>
+            <p className="mt-2 text-slate body-text">
               Official institutional vector logos, variations, and downloads.
             </p>
           </div>
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`px-4 py-2 rounded-md font-medium border ${
-              isDarkMode ? 'bg-gray-800 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-800'
-            }`}
-          >
-            Toggle {isDarkMode ? "Light" : "Dark"} Mode
-          </button>
         </div>
       </header>
 
-      <main className="container mx-auto p-8 space-y-12">
+      <main className="container mx-auto px-8 pt-12 space-y-12">
         {/* Palette Selector */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">Color Palette</h2>
+          <h2 className="h4 mb-4 text-phronesis-blue">Color Palette Variants</h2>
           <div className="flex flex-wrap gap-4">
             {palettes.map((palette) => (
               <button
                 key={palette.id}
                 onClick={() => setActivePalette(palette.id)}
-                className={`px-6 py-3 rounded-lg border-2 font-medium transition-all ${
+                className={`px-6 py-3 rounded-input border font-medium transition-all ${
                   activePalette === palette.id
-                    ? 'border-[#197C7A] bg-[#197C7A]/10 text-[#197C7A]'
-                    : isDarkMode ? 'border-gray-700 hover:border-gray-500' : 'border-gray-200 hover:border-gray-300 bg-white'
+                    ? 'border-phronesis-teal bg-phronesis-teal/10 text-phronesis-teal'
+                    : 'border-mist hover:border-slate bg-white text-ink'
                 }`}
               >
                 {palette.label}
@@ -70,15 +61,13 @@ export default function BrandAuditDashboard() {
         <section className="space-y-16">
           {structures.map((struct) => (
             <div key={struct.id} className="space-y-6">
-              <div className={`border-b pb-4 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                <h3 className="text-2xl font-bold">{struct.label}</h3>
+              <div className="border-b border-mist pb-4">
+                <h3 className="h4 text-phronesis-blue">{struct.label}</h3>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
                 {/* Visual Preview */}
-                <div className={`col-span-1 lg:col-span-2 rounded-xl p-12 flex items-center justify-center border shadow-sm ${
-                  isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-                }`}>
+                <div className={`col-span-1 lg:col-span-2 rounded-panel p-12 flex items-center justify-center border border-mist shadow-institutional ${activePalette === 'white' ? 'bg-ink' : 'bg-white'}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/brand/${struct.folder}/phronesis-${struct.id}-${activePalette}.svg`}
@@ -89,12 +78,10 @@ export default function BrandAuditDashboard() {
                 </div>
 
                 {/* Downloads */}
-                <div className={`rounded-xl p-8 border shadow-sm flex flex-col justify-center space-y-6 ${
-                  isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-                }`}>
+                <div className="rounded-panel p-8 border border-mist shadow-institutional flex flex-col justify-center space-y-6 bg-white">
                   <div>
-                    <h4 className="font-semibold text-lg">Download Formats</h4>
-                    <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <h4 className="font-semibold text-lg text-ink">Download Formats</h4>
+                    <p className="text-sm mt-1 text-slate">
                       Crisp, high-resolution vector and raster assets.
                     </p>
                   </div>
@@ -105,10 +92,10 @@ export default function BrandAuditDashboard() {
                         key={format}
                         href={`/brand/${struct.folder}/phronesis-${struct.id}-${activePalette}.${format}`}
                         download
-                        className={`flex items-center justify-center py-3 px-4 rounded-md font-semibold text-sm uppercase transition-colors ${
+                        className={`flex items-center justify-center py-3 px-4 rounded-input font-semibold text-sm uppercase transition-colors ${
                           format === 'svg' || format === 'pdf'
-                            ? 'bg-[#163A5F] text-white hover:bg-[#163A5F]/90'
-                            : isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                            ? 'bg-phronesis-blue text-white hover:bg-phronesis-blue/90 shadow-sm'
+                            : 'bg-cloud text-ink hover:bg-mist border border-mist'
                         }`}
                       >
                         {format}
