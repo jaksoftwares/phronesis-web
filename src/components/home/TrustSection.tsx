@@ -22,22 +22,9 @@ export function TrustSection() {
             </p>
           </div>
           <div className="relative">
-            <div className="aspect-[4/3] bg-mist rounded-panel border border-slate/20 shadow-institutional overflow-hidden flex items-center justify-center p-8 relative z-10">
-              {/* Abstract graphic representing verification */}
-              <div className="w-full max-w-sm space-y-4">
-                <div className="h-12 bg-white rounded flex items-center px-4 gap-4 shadow-sm">
-                  <div className="w-6 h-6 rounded-full bg-phronesis-teal flex items-center justify-center"><CheckCircle2 className="w-4 h-4 text-white" /></div>
-                  <div className="h-2 w-32 bg-slate/20 rounded-full" />
-                </div>
-                <div className="h-12 bg-white rounded flex items-center px-4 gap-4 shadow-sm opacity-70">
-                  <div className="w-6 h-6 rounded-full bg-phronesis-teal flex items-center justify-center"><CheckCircle2 className="w-4 h-4 text-white" /></div>
-                  <div className="h-2 w-48 bg-slate/20 rounded-full" />
-                </div>
-                <div className="h-12 bg-white rounded flex items-center px-4 gap-4 shadow-sm opacity-40">
-                  <div className="w-6 h-6 rounded-full bg-slate flex items-center justify-center"><div className="w-2 h-2 bg-white rounded-full animate-pulse" /></div>
-                  <div className="h-2 w-24 bg-slate/20 rounded-full" />
-                </div>
-              </div>
+            <div className="aspect-[4/3] bg-mist rounded-panel border border-slate/20 shadow-institutional overflow-hidden flex items-center justify-center p-0 relative z-10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/shared/teacher-qualified.png" alt="Teacher Verification" className="w-full h-full object-cover" />
             </div>
             {/* Background Blob */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-phronesis-teal/10 blur-3xl rounded-full z-0" />
