@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import api from '@/lib/api/axios';
 
-export default function VerifyEmail() {
+function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const email = searchParams.get('email'); // Can pass email in url for initial check, but token alone might not have it. Usually backend verifies token alone or token+email. Based on our DTO it needs email too.
@@ -96,5 +96,13 @@ export default function VerifyEmail() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function VerifyEmail() {
+  return (
+    <React.Suspense fallback={<div className="w-full text-center py-8">Loading...</div>}>
+      <VerifyEmailContent />
+    </React.Suspense>
   );
 }

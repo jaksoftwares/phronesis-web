@@ -26,7 +26,7 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const [globalError, setGlobalError] = useState<string | null>(null);
@@ -142,5 +142,13 @@ export default function ResetPassword() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function ResetPassword() {
+  return (
+    <React.Suspense fallback={<div className="w-full text-center py-8">Loading...</div>}>
+      <ResetPasswordContent />
+    </React.Suspense>
   );
 }
