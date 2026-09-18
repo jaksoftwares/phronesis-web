@@ -44,12 +44,13 @@ export function CoreCapabilities() {
           </div>
 
           {/* Medium Block 2 - Assessments */}
-          <div className="rounded-panel bg-white border border-mist p-8 flex flex-col justify-between group hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md relative overflow-hidden">
-            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-phronesis-teal/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="bg-phronesis-teal/10 w-12 h-12 rounded-card flex items-center justify-center text-phronesis-teal mb-4">
-              <PenTool className="w-6 h-6" />
+          <div className="rounded-panel bg-white border border-mist p-0 flex flex-col group hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md overflow-hidden relative">
+            <div className="h-32 w-full relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/shared/assessments-knowledge.png" alt="Assessments" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent" />
             </div>
-            <div className="space-y-2">
+            <div className="p-8 pt-0 space-y-2 relative z-10 flex-1 flex flex-col justify-end">
               <h3 className="text-xl font-bold text-ink tracking-tight">Test Your Knowledge</h3>
               <p className="text-slate text-sm leading-relaxed">
                 Reinforce learning through timed mock exams, topical exercises, and detailed marking schemes designed to prepare learners for success.

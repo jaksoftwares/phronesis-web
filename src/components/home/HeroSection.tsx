@@ -14,6 +14,7 @@ export function HeroSection() {
           src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
           alt="Happy students celebrating" 
           className="w-full h-full object-cover object-top"
+          fetchPriority="high"
         />
         {/* Soft overlay to ensure the background image is highly visible without cluttering the text */}
         <div className="absolute inset-0 bg-cloud/80 lg:bg-gradient-to-r lg:from-cloud/85 lg:via-cloud/60 lg:to-transparent" />
@@ -23,12 +24,7 @@ export function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* Left: Text Content */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-6 lg:space-y-8"
-          >
+          <div className="space-y-6 lg:space-y-8">
             <h1 className="text-5xl lg:text-7xl font-bold text-ink leading-tight tracking-tight">
               Genesis of Knowledge.<br />
               <span className="text-phronesis-blue text-4xl lg:text-5xl">The Digital Foundation for CBC Excellence.</span>
@@ -52,15 +48,10 @@ export function HeroSection() {
                 Explore Curriculum
               </Link>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right: Floating Abstract UI Mockup */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative hidden lg:block h-[450px]"
-          >
+          <div className="relative hidden lg:block h-[450px]">
             {/* Main Class Window Mockup */}
             <motion.div 
               animate={{ y: [0, -10, 0] }}
@@ -111,7 +102,7 @@ export function HeroSection() {
               </div>
               <p className="text-xs text-cloud/70 mt-3">Ready for Senior Secondary mock exams.</p>
             </motion.div>
-          </motion.div>
+          </div>
 
         </div>
       </div>
