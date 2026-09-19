@@ -8,6 +8,7 @@ import SubjectsStep from '@/components/teacher/onboarding/SubjectsStep';
 import DocumentsStep from '@/components/teacher/onboarding/DocumentsStep';
 import ReviewSubmitStep from '@/components/teacher/onboarding/ReviewSubmitStep';
 import { useAuthStore } from '@/store/authStore';
+import api from '@/lib/api/axios';
 
 export default function TeacherOnboarding() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export default function TeacherOnboarding() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [application, setApplication] = useState<TeacherApplication | null>(null);
+  const [allSubjects, setAllSubjects] = useState<{ id: string; name: string; code: string }[]>([]);
+  const [allGrades, setAllGrades] = useState<{ id: string; name: string }[]>([]);
 
   const [profileData, setProfileData] = useState({
     bio: '',
@@ -46,6 +49,16 @@ export default function TeacherOnboarding() {
         if (app.subjects && app.subjects.length > 0) {
           setSubjectsData(app.subjects);
         }
+
+        // Fetch lookup data for the review step
+        try {
+          const [gradesRes, subjectsRes] = await Promise.all([
+            api.get('/academic/grades'),
+            api.get('/subjects'),
+          ]);
+          setAllGrades(gradesRes.data?.data ?? []);
+          setAllSubjects(subjectsRes.data?.data ?? []);
+        } catch { /* non-critical */ }
         
         // If already submitted, redirect to dashboard which will handle the "Pending Review" lock
         if (app.status !== 0) { // 0 = Draft
@@ -191,8 +204,13 @@ export default function TeacherOnboarding() {
           )}
           {currentStep === 4 && (
             <ReviewSubmitStep 
+              profile={profileData}
+              subjects={subjectsData}
+              documents={application.documents}
+              allSubjects={allSubjects}
+              allGrades={allGrades}
               onSubmit={handleSubmit} 
-              onBack={() => setCurrentStep(3)} 
+              onEditStep={(step) => setCurrentStep(step)}
               loading={loading} 
             />
           )}
