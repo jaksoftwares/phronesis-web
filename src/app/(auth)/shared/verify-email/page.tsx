@@ -12,6 +12,7 @@ function VerifyEmailContent() {
   
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'pending'>('pending');
   const [errorMessage, setErrorMessage] = useState('');
+  const [userRole, setUserRole] = useState<string>('learner');
 
   useEffect(() => {
     if (token && email) {
@@ -27,10 +28,13 @@ function VerifyEmailContent() {
   const verifyToken = async (emailToVerify: string, verificationToken: string) => {
     setStatus('loading');
     try {
-      await api.post('/auth/verify-email', {
+      const response = await api.post('/auth/verify-email', {
         email: emailToVerify,
         token: verificationToken,
       });
+      if (response.data?.data?.role) {
+        setUserRole(response.data.data.role.toLowerCase());
+      }
       setStatus('success');
     } catch (error: any) {
       setStatus('error');
@@ -75,9 +79,12 @@ function VerifyEmailContent() {
           <p className="text-slate-500 mb-6">
             Your account is now fully active. You can log in to access the platform.
           </p>
-          <Link href="/learner/login" className="inline-block bg-phronesis-blue text-white px-8 py-3 rounded-[var(--radius-input)] font-semibold transition-colors hover:bg-[#112a45]">
-            Sign In Now
-          </Link>
+          
+          <div className="flex justify-center mt-4">
+            <Link href={`/${userRole}/login`} className="inline-block bg-phronesis-blue text-white px-8 py-3 rounded-[var(--radius-input)] font-semibold transition-colors hover:bg-[#112a45]">
+              Sign In Now
+            </Link>
+          </div>
         </div>
       )}
 

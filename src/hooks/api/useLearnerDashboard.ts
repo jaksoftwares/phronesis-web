@@ -9,6 +9,7 @@ interface DashboardData {
   learner: {
     gradeLevelId: string;
     schoolName: string | null;
+    registrationNumber: string;
   };
   learningStreak: number;
   activeEnrollmentsCount: number;

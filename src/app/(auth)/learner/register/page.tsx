@@ -11,6 +11,7 @@ import { FloatingLabelInput } from '@/components/ui/FloatingLabelInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { PasswordStrengthMeter } from '@/components/ui/PasswordStrengthMeter';
 import { useAcademicGrades } from '@/hooks/api/useAcademicGrades';
+import { PortalSwitcher } from '@/components/auth/PortalSwitcher';
 
 const registerSchema = z.object({
   firstName: z.string().min(2, 'First name is required'),
@@ -67,10 +68,12 @@ export default function LearnerRegister() {
 
   return (
     <div className="w-full">
-      <div className="mb-8">
+      <div className="mb-6">
         <h2 className="h2 text-phronesis-blue mb-2">Join Phronesis</h2>
         <p className="text-slate-500">Create your Learner account to access premium educational content.</p>
       </div>
+
+      <PortalSwitcher currentPortal="learner" type="register" />
 
       {globalError && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[var(--radius-input)] text-red-600 text-sm">

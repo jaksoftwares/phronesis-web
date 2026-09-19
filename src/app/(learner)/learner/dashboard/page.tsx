@@ -37,6 +37,7 @@ export default function LearnerDashboard() {
       <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
         <WelcomeWidget 
           user={userObj} 
+          registrationNumber={dashboard.data?.learner?.registrationNumber}
           learningStreak={dashboard.data?.learningStreak || 0} 
         />
       </motion.div>

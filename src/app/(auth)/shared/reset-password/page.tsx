@@ -31,6 +31,7 @@ function ResetPasswordContent() {
   const token = searchParams.get('token');
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [userRole, setUserRole] = useState<string>('learner');
 
   const {
     register,
@@ -50,11 +51,14 @@ function ResetPasswordContent() {
     }
     setGlobalError(null);
     try {
-      await api.post('/auth/reset-password', {
+      const response = await api.post('/auth/reset-password', {
         email: data.email,
         token: token,
         newPassword: data.newPassword,
       });
+      if (response.data?.data?.role) {
+        setUserRole(response.data.data.role.toLowerCase());
+      }
       setSuccess(true);
     } catch (error: any) {
       setGlobalError(error.response?.data?.message || 'Failed to reset password. The link may have expired.');
@@ -87,7 +91,7 @@ function ResetPasswordContent() {
             Your password has been securely updated.
           </p>
         </div>
-        <Link href="/learner/login" className="inline-block mt-4 text-white bg-phronesis-blue px-6 py-3 rounded-[var(--radius-input)] font-semibold transition-colors hover:bg-[#112a45]">
+        <Link href={`/${userRole}/login`} className="inline-block mt-4 text-white bg-phronesis-blue px-6 py-3 rounded-[var(--radius-input)] font-semibold transition-colors hover:bg-[#112a45]">
           Sign In Now
         </Link>
       </div>

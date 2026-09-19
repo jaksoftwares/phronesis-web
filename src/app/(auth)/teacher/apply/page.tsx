@@ -10,6 +10,7 @@ import api from '@/lib/api/axios';
 import { FloatingLabelInput } from '@/components/ui/FloatingLabelInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { PasswordStrengthMeter } from '@/components/ui/PasswordStrengthMeter';
+import { PortalSwitcher } from '@/components/auth/PortalSwitcher';
 
 const applySchema = z.object({
   firstName: z.string().min(2, 'First name is required'),
@@ -43,7 +44,7 @@ export default function TeacherApply() {
     setGlobalError(null);
     try {
       // Teachers register process usually places them in an 'applicant' state
-      await api.post('/auth/register', data);
+      await api.post('/teachers/register', data);
       router.push('/shared/verify-email');
     } catch (error: any) {
       setGlobalError(error.response?.data?.message || 'Failed to submit application. Please try again.');
@@ -52,10 +53,12 @@ export default function TeacherApply() {
 
   return (
     <div className="w-full">
-      <div className="mb-8">
+      <div className="mb-6">
         <h2 className="h2 text-phronesis-blue mb-2">Apply to Teach</h2>
         <p className="text-slate-500">Join our network of elite educators.</p>
       </div>
+
+      <PortalSwitcher currentPortal="teacher" type="register" />
 
       {globalError && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[var(--radius-input)] text-red-600 text-sm">

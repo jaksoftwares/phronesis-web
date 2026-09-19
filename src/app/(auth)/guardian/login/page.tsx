@@ -10,6 +10,7 @@ import api from '@/lib/api/axios';
 import { useAuthStore } from '@/store/authStore';
 import { FloatingLabelInput } from '@/components/ui/FloatingLabelInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
+import { PortalSwitcher } from '@/components/auth/PortalSwitcher';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -21,6 +22,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function GuardianLogin() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const [globalError, setGlobalError] = useState<string | null>(null);
 
   const {
@@ -38,12 +40,20 @@ export default function GuardianLogin() {
       const authData = response.data?.data;
       
       if (authData?.accessToken) {
-        api.defaults.headers.common['Authorization'] = `Bearer ${authData.accessToken}`;
+        setAccessToken(authData.accessToken);
         const meResponse = await api.get('/auth/me');
         const user = meResponse.data?.data;
         
         if (user) {
           setAuth(user, authData.accessToken);
+          const primaryRole = user.roles?.[0]?.toLowerCase();
+          if (primaryRole !== 'guardian') {
+            api.post('/auth/logout').catch(() => {});
+            setAuth(null as any, null as any);
+            setGlobalError(`Access denied. This portal is for Guardians, but your account is a ${primaryRole || 'Unknown Role'}. Please use the Portal Switcher to select the correct portal.`);
+            return;
+          }
+          
           router.push('/guardian/dashboard');
         }
       }
@@ -54,14 +64,23 @@ export default function GuardianLogin() {
 
   return (
     <div className="w-full">
-      <div className="mb-8">
+      <div className="mb-6">
         <h2 className="h2 text-phronesis-blue mb-2">Guardian Access</h2>
         <p className="text-slate-500">Sign in to manage and monitor your dependents' education.</p>
       </div>
 
+      <PortalSwitcher currentPortal="guardian" type="login" />
+
       {globalError && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[var(--radius-input)] text-red-600 text-sm">
           {globalError}
+          {globalError.toLowerCase().includes('verified') && (
+            <div className="mt-2">
+              <Link href="/shared/resend-verification" className="font-semibold underline hover:text-red-800">
+                Resend verification link
+              </Link>
+            </div>
+          )}
         </div>
       )}
 

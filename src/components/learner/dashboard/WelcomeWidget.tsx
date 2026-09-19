@@ -5,10 +5,11 @@ import { motion } from 'framer-motion';
 
 interface WelcomeWidgetProps {
   user: { firstName: string; lastName: string } | undefined;
+  registrationNumber?: string;
   learningStreak: number;
 }
 
-export function WelcomeWidget({ user, learningStreak }: WelcomeWidgetProps) {
+export function WelcomeWidget({ user, registrationNumber, learningStreak }: WelcomeWidgetProps) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -21,11 +22,21 @@ export function WelcomeWidget({ user, learningStreak }: WelcomeWidgetProps) {
           Genesis of Knowledge
         </h2>
         {user ? (
-          <h1 className="text-4xl font-bold mb-4">
-            Welcome back, {user.firstName}
-          </h1>
+          <div className="flex flex-col gap-2 mb-4">
+            <h1 className="text-4xl font-bold">
+              Welcome back, {user.firstName}
+            </h1>
+            {registrationNumber && (
+              <span className="inline-flex items-center w-max px-2.5 py-1 rounded-md bg-white/10 border border-white/20 text-sm font-medium font-mono text-[#E9EEF2]">
+                ID: {registrationNumber}
+              </span>
+            )}
+          </div>
         ) : (
-          <div className="h-10 w-64 bg-white/20 rounded animate-pulse mb-4"></div>
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="h-10 w-64 bg-white/20 rounded animate-pulse"></div>
+            <div className="h-6 w-32 bg-white/10 rounded animate-pulse"></div>
+          </div>
         )}
         <p className="text-[#E9EEF2] text-lg max-w-lg mb-6 leading-relaxed">
           Your dedication to excellence is inspiring. Ready to continue your journey?

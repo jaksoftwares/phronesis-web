@@ -83,3 +83,10 @@ When translating this brand into web components (e.g., Tailwind CSS):
 
 ---
 *End of Guidelines. These rules must be referenced during all future frontend development to ensure the institutional integrity of Phronesis Homeschool.*
+
+
+Download: Search for "Azure Data Studio Download" or go directly here: Download Azure Data Studio
+How to connect: Once installed, click "New Connection", enter (localdb)\mssqllocaldb as the server name, and set Authentication to "Windows Authentication".
+
+dotnet ef database drop --force --project src/Phronesis.Infrastructure --startup-project src/Phronesis.Api
+dotnet ef database update --project src/Phronesis.Infrastructure --startup-project src/Phronesis.Api
