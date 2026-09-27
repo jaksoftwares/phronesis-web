@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import ContentCard from './ContentCard';
+import { ContentCard } from './ContentCard';
 
 interface ContentItem {
   id: string;
@@ -81,7 +81,7 @@ export default function ContentGrid({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {items.map((item) => (
-          <ContentCard key={item.id} {...item} />
+          <ContentCard key={item.id} item={item as any} onClick={() => {}} />
         ))}
       </div>
 
