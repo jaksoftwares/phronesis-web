@@ -82,9 +82,9 @@ export function DashboardSidebar() {
     { name: 'Dashboard', href: `${basePath}/dashboard`, icon: <HomeIcon /> },
   ];
 
-  if (role === 'Teacher' && hasPendingApp && (user as any)?.verificationState !== 2) {
+  if (role === 'Teacher' && hasPendingApp) {
     navigation.push({ name: 'Application History', href: `${basePath}/dashboard?view=history`, icon: <HistoryIcon /> });
-  } else if (role === 'Teacher' && (user as any)?.verificationState === 2) {
+  } else if (role === 'Teacher') {
     navigation.push(
       { name: 'My Classes', href: `${basePath}/classes`, icon: <UsersIcon /> },
       { name: 'Assessments', href: `${basePath}/assessments`, icon: (
