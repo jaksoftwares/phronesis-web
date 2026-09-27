@@ -1,7 +1,7 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import api from '@/lib/api/axios';
 
@@ -16,11 +16,19 @@ const STAGE_LABEL: Record<number, string> = {
 export default function TeacherDashboard() {
   const { user } = useAuthStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [profile, setProfile] = useState<any>(null);
   const [application, setApplication] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [resetting, setResetting] = useState(false);
-  const [resetMsg, setResetMsg] = useState('');
+  const [showStatusView, setShowStatusView] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('view') === 'history') {
+      setShowStatusView(true);
+    } else {
+      setShowStatusView(false);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -37,19 +45,6 @@ export default function TeacherDashboard() {
     })();
   }, [user?.id]);
 
-  const handleWithdraw = async () => {
-    if (!confirm('Reset your application back to Draft so you can fix and resubmit?')) return;
-    setResetting(true);
-    try {
-      await api.post('/teacher-onboarding/me/reset-to-draft');
-      setResetMsg('Done! Redirecting...');
-      setTimeout(() => router.push('/teacher/onboarding'), 1200);
-    } catch (err: any) {
-      setResetMsg(err.response?.data?.message || 'Reset failed. Contact support.');
-      setResetting(false);
-    }
-  };
-
   if (loading) return (
     <div className="flex h-64 items-center justify-center">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#163A5F]" />
@@ -58,6 +53,8 @@ export default function TeacherDashboard() {
 
   const vs = profile?.verificationState;
   const st = application?.status;
+
+  const hasPendingApp = application && st !== S.Draft && vs !== 2;
 
   // Verified teacher - full dashboard
   if (vs === 2) return (
@@ -76,22 +73,39 @@ export default function TeacherDashboard() {
     </div>
   );
 
-  // No application or draft - show onboarding prompt
-  if (!application || st === S.Draft) return (
+  // If application is in progress but they haven't clicked to view status yet
+  if (!showStatusView && vs !== 2) return (
     <div className="max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-[#163A5F] mb-6">Welcome, {user?.firstName || 'Teacher'}!</h1>
-      <div className="bg-blue-50 border border-blue-200 p-8 rounded-2xl text-center max-w-3xl mx-auto mt-8">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#163A5F]">
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
+      
+      {!hasPendingApp ? (
+        <div className="bg-blue-50 border border-blue-200 p-8 rounded-2xl text-center max-w-3xl mx-auto mt-8">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#163A5F]">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-[#163A5F] mb-3">Complete Your Teacher Profile</h2>
+          <p className="text-slate-600 mb-8 max-w-lg mx-auto">Before you can start teaching, we need your qualifications, subjects, and compliance documents.</p>
+          <button onClick={() => router.push('/teacher/onboarding')} className="px-8 py-3 bg-[#163A5F] text-white rounded-lg font-semibold hover:bg-[#112a45] transition-colors">
+            {st === S.Draft ? 'Continue Application (Draft Saved)' : 'Start Onboarding'}
+          </button>
         </div>
-        <h2 className="text-2xl font-bold text-[#163A5F] mb-3">Complete Your Teacher Profile</h2>
-        <p className="text-slate-600 mb-8 max-w-lg mx-auto">Before you can start teaching, we need your qualifications, subjects, and compliance documents.</p>
-        <button onClick={() => router.push('/teacher/onboarding')} className="px-8 py-3 bg-[#163A5F] text-white rounded-lg font-semibold hover:bg-[#112a45] transition-colors">
-          {st === S.Draft ? 'Continue Application (Draft Saved)' : 'Start Onboarding'}
-        </button>
-      </div>
+      ) : (
+        <div className="bg-blue-50 border border-blue-200 p-8 rounded-2xl text-center max-w-3xl mx-auto mt-8">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#163A5F]">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-[#163A5F] mb-3">Application in Progress</h2>
+          <p className="text-slate-600 mb-8 max-w-lg mx-auto">Your application has been submitted and is currently moving through our review pipeline.</p>
+          <button onClick={() => setShowStatusView(true)} className="px-8 py-3 bg-[#163A5F] text-white rounded-lg font-semibold hover:bg-[#112a45] transition-colors">
+            Track Application Status
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 opacity-40 pointer-events-none">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
           <h3 className="text-xl font-semibold text-slate-800 mb-2">My Classes</h3>
@@ -104,8 +118,6 @@ export default function TeacherDashboard() {
       </div>
     </div>
   );
-
-  // Application in progress - show full status page
   const stages = [
     { label: 'Application Submitted', sublabel: application.submittedAt ? new Date(application.submittedAt).toLocaleDateString('en-KE', { dateStyle: 'medium' }) : null, done: st >= S.Submitted },
     { label: 'Document Verification', sublabel: 'Compliance team review', done: st >= S.UnderReview },
@@ -125,6 +137,16 @@ export default function TeacherDashboard() {
 
   return (
     <div className="max-w-3xl mx-auto mt-6 space-y-6">
+      <button 
+        onClick={() => router.push('/teacher/dashboard')}
+        className="flex items-center text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors mb-4"
+      >
+        <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Dashboard
+      </button>
+
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-[#163A5F]">Application Status</h1>
         <span className={'px-3 py-1 rounded-full text-xs font-semibold ' + (
@@ -269,28 +291,12 @@ export default function TeacherDashboard() {
             <div>
               <h3 className="font-bold text-red-800 text-lg">Application Not Successful</h3>
               {application.adminNotes && <p className="text-red-700 text-sm mt-1 italic">"{application.adminNotes}"</p>}
-              <p className="text-sm text-gray-500 mt-3">You are welcome to update your profile and reapply at any time.</p>
-              <button onClick={() => router.push('/teacher/onboarding')} className="mt-3 px-5 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors">
-                Edit and Resubmit
-              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Withdraw & restart - shown for all non-final states */}
-      {st !== S.Approved && st !== S.Rejected && (
-        <div className="bg-gray-50 border border-gray-200 p-5 rounded-xl">
-          <p className="text-sm font-medium text-gray-600 mb-1">Something wrong with your submission?</p>
-          <p className="text-sm text-gray-500 mb-3">You can withdraw and restart your application to upload correct documents or fix any details.</p>
-          {resetMsg && (
-            <p className={'text-sm font-medium mb-3 ' + (resetMsg.includes('Done') ? 'text-green-600' : 'text-red-600')}>{resetMsg}</p>
-          )}
-          <button onClick={handleWithdraw} disabled={resetting} className="px-4 py-2 bg-gray-700 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-60">
-            {resetting ? 'Resetting...' : 'Withdraw and Restart Application'}
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }

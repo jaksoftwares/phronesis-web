@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +20,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function AdminLogin() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const [globalError, setGlobalError] = useState<string | null>(null);
 
   const {
@@ -38,29 +38,34 @@ export default function AdminLogin() {
       const authData = response.data?.data;
       
       if (authData?.accessToken) {
-        api.defaults.headers.common['Authorization'] = `Bearer ${authData.accessToken}`;
+        setAccessToken(authData.accessToken);
         const meResponse = await api.get('/auth/me');
         const user = meResponse.data?.data;
         
-        // Ensure user is actually an admin before allowing login via this portal
-        const roles = user?.roles || [];
-        if (user && (roles.includes('Admin') || roles.includes('Staff'))) {
+        if (user) {
           setAuth(user, authData.accessToken);
+          const primaryRole = user.roles?.[0]?.toLowerCase();
+          if (primaryRole !== 'admin') {
+            api.post('/auth/logout').catch(() => {});
+            setAuth(null as any, null as any);
+            setGlobalError(`Access denied. This portal is for Administrators, but your account is a ${primaryRole || 'Unknown Role'}.`);
+            return;
+          }
+          
           router.push('/admin/dashboard');
-        } else {
-          setGlobalError('Unauthorized access. This portal is for Staff and Administrators only.');
         }
       }
     } catch (error: any) {
-      setGlobalError(error.response?.data?.message || 'Failed to login. Please try again.');
+      const msg = error.response?.data?.message || 'Failed to login. Please try again.';
+      setGlobalError(msg);
     }
   };
 
   return (
     <div className="w-full">
-      <div className="mb-8">
-        <h2 className="h2 text-phronesis-blue mb-2">Staff & Administration</h2>
-        <p className="text-slate-500">Secure access gateway for platform administrators.</p>
+      <div className="mb-6">
+        <h2 className="h2 text-phronesis-blue mb-2">Admin Portal</h2>
+        <p className="text-slate-500">Sign in to manage the Phronesis platform.</p>
       </div>
 
       {globalError && (
@@ -71,7 +76,7 @@ export default function AdminLogin() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <FloatingLabelInput
-          label="Administrator Email"
+          label="Email Address"
           type="email"
           autoComplete="email"
           error={errors.email?.message}
@@ -87,17 +92,11 @@ export default function AdminLogin() {
         />
 
         <div className="pt-4">
-          <PrimaryButton type="submit" isLoading={isSubmitting} className="bg-slate-800 hover:bg-slate-900 border-none">
-            Secure Login
+          <PrimaryButton type="submit" isLoading={isSubmitting}>
+            Sign In to Admin Panel
           </PrimaryButton>
         </div>
       </form>
-      
-      <div className="mt-8 text-center text-slate-500 text-sm">
-        <Link href="/shared/forgot-password" className="text-phronesis-blue hover:text-phronesis-gold font-medium transition-colors">
-          Forgot password?
-        </Link>
-      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { WelcomeWidget } from '@/components/learner/dashboard/WelcomeWidget';
 import { UpcomingClassesList } from '@/components/learner/dashboard/UpcomingClassesList';
 import { ContinueLearningCard } from '@/components/learner/dashboard/ContinueLearningCard';
 import { RecentActivityFeed } from '@/components/learner/dashboard/RecentActivityFeed';
+import { QuickActionsBar } from '@/components/learner/dashboard/QuickActionsBar';
 import { motion } from 'framer-motion';
 
 export default function LearnerDashboard() {
@@ -40,6 +41,11 @@ export default function LearnerDashboard() {
           registrationNumber={dashboard.data?.learner?.registrationNumber}
           learningStreak={dashboard.data?.learningStreak || 0} 
         />
+      </motion.div>
+
+      {/* Quick Actions */}
+      <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+        <QuickActionsBar />
       </motion.div>
 
       {/* Middle Section: Grid */}
