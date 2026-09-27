@@ -1,48 +1,45 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export function SubscriptionStatusCard() {
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-[var(--color-phronesis-blue)] to-[#0f2844] rounded-[var(--radius-card)] p-6 shadow-sm h-full flex flex-col text-white"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold">Billing & Access</h3>
-        <div className="p-2 bg-white/10 rounded-full">
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="flex-1 flex flex-col justify-center">
-        <div className="mb-4">
-          <p className="text-sm text-white/70 font-medium mb-1">Current Plan</p>
-          <div className="flex items-end gap-2">
-            <h4 className="text-3xl font-bold">Premium</h4>
-            <span className="text-sm text-white/70 mb-1">/ Family</span>
+    <div className="bg-gradient-to-br from-[#163A5F] to-[#112a45] rounded-xl p-6 text-white shadow-lg relative overflow-hidden h-full flex flex-col justify-between">
+      <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl pointer-events-none"></div>
+      
+      <div className="relative z-10">
+        <div className="flex justify-between items-start mb-6">
+          <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20">
+            <svg className="w-6 h-6 text-[#D5A63A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
           </div>
+          <span className="px-2.5 py-1 text-xs font-bold uppercase tracking-wider bg-green-500/20 text-green-400 border border-green-500/30 rounded-full">
+            Active
+          </span>
         </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-sm bg-white/10 p-3 rounded-lg">
-            <span className="text-white/80">Status</span>
-            <span className="font-semibold text-green-400">Active</span>
+        <h3 className="text-2xl font-bold mb-1">Family Premium Plan</h3>
+        <p className="text-white/70 text-sm mb-6">Covers 2 dependents • All Live Classes Included</p>
+        
+        <div className="space-y-3 mb-8">
+          <div className="flex justify-between text-sm">
+            <span className="text-white/60">Next Billing Date</span>
+            <span className="font-semibold text-white">Oct 15, 2026</span>
           </div>
-          <div className="flex items-center justify-between text-sm bg-white/10 p-3 rounded-lg">
-            <span className="text-white/80">Next Billing</span>
-            <span className="font-semibold">Oct 15, 2026</span>
+          <div className="flex justify-between text-sm">
+            <span className="text-white/60">Amount Due</span>
+            <span className="font-bold text-[#D5A63A]">$149.00</span>
           </div>
         </div>
       </div>
-
-      <button className="mt-6 w-full py-3 bg-[var(--color-phronesis-gold)] hover:bg-[#c49835] text-[var(--color-ink)] font-bold rounded-[var(--radius-input)] transition-colors">
-        Manage Subscription
-      </button>
-    </motion.div>
+      
+      <div className="relative z-10">
+        <Link href="/guardian/billing">
+          <button className="w-full py-2.5 bg-white text-[#163A5F] font-bold rounded-lg hover:bg-gray-100 transition-colors shadow-md">
+            Manage Billing
+          </button>
+        </Link>
+      </div>
+    </div>
   );
 }

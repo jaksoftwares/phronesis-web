@@ -82,9 +82,10 @@ export function DashboardSidebar() {
     { name: 'Dashboard', href: `${basePath}/dashboard`, icon: <HomeIcon /> },
   ];
 
-  if (role === 'Teacher' && hasPendingApp) {
-    navigation.push({ name: 'Application History', href: `${basePath}/dashboard?view=history`, icon: <HistoryIcon /> });
-  } else if (role === 'Teacher') {
+  if (role === 'Teacher') {
+    if (hasPendingApp) {
+      navigation.push({ name: 'Application History', href: `${basePath}/dashboard?view=history`, icon: <HistoryIcon /> });
+    }
     navigation.push(
       { name: 'My Classes', href: `${basePath}/classes`, icon: <UsersIcon /> },
       { name: 'Assessments', href: `${basePath}/assessments`, icon: (
@@ -105,9 +106,21 @@ export function DashboardSidebar() {
         </svg>
       )}
     );
-  }
-
-  if (role === 'Admin') {
+  } else if (role === 'Guardian') {
+    navigation.push(
+      { name: 'Dependents', href: `${basePath}/dependents`, icon: <UsersIcon /> },
+      { name: 'Billing & Plans', href: `${basePath}/billing`, icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+        </svg>
+      )},
+      { name: 'Messages', href: `${basePath}/messages`, icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+      )}
+    );
+  } else if (role === 'Admin') {
     navigation.push(
       { name: 'Users', href: `${basePath}/users`, icon: <UsersIcon /> },
       { name: 'Teacher Applications', href: `${basePath}/teachers/applications`, icon: <ClipboardIcon /> }

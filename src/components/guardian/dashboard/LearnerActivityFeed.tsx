@@ -1,64 +1,48 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { useGuardianDashboard } from '@/hooks/api/useGuardianDashboard';
 
 export function LearnerActivityFeed() {
-  const { primaryLearnerActivity } = useGuardianDashboard();
+  const activities = [
+    { id: '1', child: 'Alex', action: 'completed assessment', target: 'Mid-Term Mock Exam', time: '2 hours ago', type: 'assessment', score: '85%' },
+    { id: '2', child: 'Mia', action: 'joined live class', target: 'Algebra I', time: '3 hours ago', type: 'class' },
+    { id: '3', child: 'Alex', action: 'earned a badge', target: 'Physics Master', time: 'Yesterday', type: 'achievement' }
+  ];
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-[var(--radius-card)] p-6 shadow-sm border border-[var(--color-mist)] h-full flex flex-col"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-[var(--color-ink)]">Recent Activity</h3>
-      </div>
+    <div className="bg-white rounded-[var(--radius-card)] p-6 shadow-sm border border-[var(--color-mist)] h-[400px] flex flex-col">
+      <h3 className="text-lg font-bold text-[var(--color-ink)] mb-6 flex items-center gap-2">
+        <svg className="w-5 h-5 text-[var(--color-phronesis-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        Recent Activity
+      </h3>
 
-      <div className="flex-1">
-        {primaryLearnerActivity.isLoading ? (
-          <div className="space-y-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-16 w-full bg-[var(--color-mist)] rounded-[var(--radius-input)] animate-pulse"></div>
-            ))}
-          </div>
-        ) : primaryLearnerActivity.data?.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center py-8">
-            <div className="w-12 h-12 bg-[var(--color-cloud)] rounded-full flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-[var(--color-slate)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <p className="text-sm text-[var(--color-slate)]">No recent activity found.</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {primaryLearnerActivity.data?.map((activity) => (
-              <div key={activity.id} className="flex gap-4 p-3 hover:bg-[var(--color-cloud)] rounded-[var(--radius-input)] transition-colors border border-transparent hover:border-[var(--color-mist)]">
-                <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center ${activity.isCompleted ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'}`}>
-                  {activity.isCompleted ? (
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    </svg>
-                  )}
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-[var(--color-ink)] line-clamp-1">{activity.contentTitle}</h4>
-                  <p className="text-xs text-[var(--color-slate)] mt-1">
-                    {activity.isCompleted ? 'Completed on' : 'Started on'} {new Date(activity.lastAccessedAt).toLocaleDateString()}
-                  </p>
-                </div>
+      <div className="flex-1 overflow-y-auto pr-2 space-y-4">
+        {activities.map(act => (
+          <div key={act.id} className="flex gap-4">
+            <div className="relative flex flex-col items-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 z-10 border-2 border-white shadow-sm
+                ${act.type === 'assessment' ? 'bg-purple-100 text-purple-600' : act.type === 'class' ? 'bg-blue-100 text-blue-600' : 'bg-yellow-100 text-yellow-600'}`}>
+                {act.type === 'assessment' && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+                {act.type === 'class' && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>}
+                {act.type === 'achievement' && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>}
               </div>
-            ))}
+              <div className="w-0.5 h-full bg-gray-100 absolute top-10 -z-10"></div>
+            </div>
+            
+            <div className="pb-4">
+              <p className="text-sm text-[var(--color-ink)]">
+                <span className="font-bold">{act.child}</span> {act.action} <span className="font-semibold text-[var(--color-phronesis-blue)]">{act.target}</span>
+              </p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-xs text-[var(--color-slate)]">{act.time}</span>
+                {act.score && (
+                  <span className="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">Score: {act.score}</span>
+                )}
+              </div>
+            </div>
           </div>
-        )}
+        ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
