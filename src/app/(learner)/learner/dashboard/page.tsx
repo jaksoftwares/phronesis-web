@@ -6,6 +6,7 @@ import { UpcomingClassesList } from '@/components/learner/dashboard/UpcomingClas
 import { ContinueLearningCard } from '@/components/learner/dashboard/ContinueLearningCard';
 import { RecentActivityFeed } from '@/components/learner/dashboard/RecentActivityFeed';
 import { QuickActionsBar } from '@/components/learner/dashboard/QuickActionsBar';
+import { ProgressSummaryWidget } from '@/components/learner/dashboard/ProgressSummaryWidget';
 import { motion } from 'framer-motion';
 
 export default function LearnerDashboard() {
@@ -51,18 +52,21 @@ export default function LearnerDashboard() {
       {/* Middle Section: Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Left Column (2/3 width on large screens) */}
-        <div className="xl:col-span-2 space-y-6">
+        <div className="xl:col-span-2 space-y-6 flex flex-col">
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
             <ContinueLearningCard resource={continueLearning.data} />
           </motion.div>
-          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="flex-1">
             <RecentActivityFeed resources={recentResources.data} />
           </motion.div>
         </div>
 
         {/* Right Column (1/3 width on large screens) */}
-        <div className="xl:col-span-1">
-          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="h-full">
+        <div className="xl:col-span-1 space-y-6 flex flex-col">
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+            <ProgressSummaryWidget />
+          </motion.div>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="flex-1">
             <UpcomingClassesList classes={upcomingClasses.data} />
           </motion.div>
         </div>

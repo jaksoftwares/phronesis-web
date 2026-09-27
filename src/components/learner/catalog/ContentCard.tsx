@@ -1,105 +1,86 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import { motion } from 'framer-motion';
 
-const typeConfig: Record<number, { label: string; icon: string; gradient: string }> = {
-  0: { label: 'Document',    icon: '📄', gradient: 'from-blue-500 to-indigo-600' },
-  1: { label: 'Video',       icon: '🎬', gradient: 'from-rose-500 to-pink-600' },
-  2: { label: 'Interactive', icon: '🎮', gradient: 'from-emerald-500 to-teal-600' },
-  3: { label: 'Audio',       icon: '🎧', gradient: 'from-violet-500 to-purple-600' },
-  4: { label: 'Simulation',  icon: '🔬', gradient: 'from-amber-500 to-orange-600' },
-};
-
-interface ContentCardProps {
+export interface ContentItem {
   id: string;
   title: string;
-  description?: string;
-  contentType: number;
-  isPremium: boolean;
-  tags?: string[];
-  primaryAttachmentUrl?: string | null;
-  authorId?: string;
-  publishedAt?: string;
+  subject: string;
+  type: 'Video' | 'Document' | 'Interactive';
+  duration: string;
+  thumbnail: string;
+  rating: number;
 }
 
-export default function ContentCard({
-  id,
-  title,
-  description,
-  contentType,
-  isPremium,
-  tags = [],
-  primaryAttachmentUrl,
-  publishedAt,
-}: ContentCardProps) {
-  const type = typeConfig[contentType] ?? typeConfig[0];
+interface ContentCardProps {
+  item: ContentItem;
+  onClick: (item: ContentItem) => void;
+}
+
+export function ContentCard({ item, onClick }: ContentCardProps) {
+  const getIcon = (type: string) => {
+    if (type === 'Video') {
+      return (
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+        </svg>
+      );
+    }
+    return (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    );
+  };
 
   return (
-    <Link href={`/learner/catalog/${id}`} className="group block">
-      <div className="relative bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 ease-out h-full flex flex-col">
-        
-        {/* Thumbnail / Hero */}
-        <div className={`relative h-40 bg-gradient-to-br ${type.gradient} flex items-center justify-center overflow-hidden`}>
-          {primaryAttachmentUrl ? (
-            <img src={primaryAttachmentUrl} alt={title} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" />
-          ) : (
-            <div className="flex flex-col items-center justify-center text-white/90 select-none">
-              <span className="text-5xl mb-1">{type.icon}</span>
-            </div>
-          )}
-          {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-          
-          {/* Type badge */}
-          <div className="absolute top-3 left-3">
-            <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-2.5 py-1 rounded-full border border-white/30">
-              {type.icon} {type.label}
-            </span>
-          </div>
-
-          {/* Premium badge */}
-          {isPremium && (
-            <div className="absolute top-3 right-3">
-              <span className="inline-flex items-center gap-1 bg-amber-400 text-amber-900 text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
-                ⭐ Premium
-              </span>
-            </div>
-          )}
+    <motion.div
+      whileHover={{ y: -5, scale: 1.02 }}
+      className="bg-white rounded-xl overflow-hidden shadow-[var(--shadow-institutional)] border border-[var(--color-mist)] cursor-pointer group flex flex-col h-full transition-all duration-300 hover:shadow-xl"
+      onClick={() => onClick(item)}
+    >
+      <div className="relative h-40 overflow-hidden bg-[var(--color-cloud)]">
+        <img 
+          src={item.thumbnail} 
+          alt={item.title} 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-md rounded text-[10px] font-bold text-white uppercase tracking-wide flex items-center gap-1.5">
+          {getIcon(item.type)}
+          {item.duration}
         </div>
-
-        {/* Body */}
-        <div className="flex-1 p-4 flex flex-col">
-          <h3 className="font-bold text-slate-900 text-sm leading-snug line-clamp-2 group-hover:text-blue-700 transition-colors mb-1.5">
-            {title}
-          </h3>
-          {description && (
-            <p className="text-xs text-slate-500 line-clamp-2 mb-3 flex-1">
-              {description}
-            </p>
-          )}
-
-          {/* Tags */}
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-auto pt-2 border-t border-slate-100">
-              {tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-                  {tag}
-                </span>
-              ))}
-              {tags.length > 3 && (
-                <span className="text-xs text-slate-400">+{tags.length - 3}</span>
-              )}
-            </div>
-          )}
-
-          {publishedAt && (
-            <p className="text-xs text-slate-400 mt-2">
-              {new Date(publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-            </p>
-          )}
+        <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded text-[10px] font-bold text-[var(--color-phronesis-teal)] uppercase tracking-wide">
+          {item.subject}
+        </div>
+        
+        {/* Play overlay for hover state */}
+        <div className="absolute inset-0 bg-[#163A5F]/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform scale-50 group-hover:scale-100 transition-transform duration-300 delay-75">
+            <svg className="w-5 h-5 text-[var(--color-phronesis-blue)] ml-1" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+            </svg>
+          </div>
         </div>
       </div>
-    </Link>
+      
+      <div className="p-4 flex-1 flex flex-col">
+        <h4 className="font-bold text-[var(--color-ink)] text-base mb-2 line-clamp-2 leading-tight group-hover:text-[var(--color-phronesis-blue)] transition-colors">
+          {item.title}
+        </h4>
+        <div className="mt-auto pt-3 border-t border-[var(--color-mist)] flex items-center justify-between">
+          <div className="flex items-center gap-1 text-[var(--color-phronesis-gold)]">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span className="text-xs font-semibold text-[var(--color-ink)]">{item.rating}</span>
+          </div>
+          <span className="text-xs font-semibold text-[var(--color-phronesis-blue)] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            View Material
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </span>
+        </div>
+      </div>
+    </motion.div>
   );
 }

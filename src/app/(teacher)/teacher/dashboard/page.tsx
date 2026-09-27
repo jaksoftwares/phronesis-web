@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import api from '@/lib/api/axios';
+import { TeacherMetricsWidget } from '@/components/teacher/dashboard/TeacherMetricsWidget';
+import { UpcomingClassesWidget } from '@/components/teacher/dashboard/UpcomingClassesWidget';
 
 const S = { Draft: 0, Submitted: 1, UnderReview: 2, InterviewScheduled: 3, InterviewCompleted: 4, Approved: 5, Rejected: 6 };
 
@@ -58,16 +60,31 @@ export default function TeacherDashboard() {
 
   // Verified teacher - full dashboard
   if (vs === 2) return (
-    <div className="max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#163A5F] mb-6">Welcome back, {user?.firstName || 'Teacher'}!</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="text-xl font-semibold text-slate-800 mb-2">My Classes</h3>
-          <p className="text-slate-500">No classes assigned yet.</p>
+    <div className="max-w-7xl mx-auto space-y-6 pb-12">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">Welcome back, {user?.firstName || 'Teacher'}!</h1>
+          <p className="text-[var(--color-slate)] text-lg">
+            Here's what's happening with your classes today.
+          </p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="text-xl font-semibold text-slate-800 mb-2">Upcoming Schedule</h3>
-          <p className="text-slate-500">Your calendar is clear.</p>
+        <button className="px-6 py-2.5 bg-[var(--color-phronesis-blue)] text-white font-medium rounded-lg hover:bg-opacity-90 transition-colors shadow-md">
+          + Start Live Class
+        </button>
+      </div>
+
+      <TeacherMetricsWidget />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[400px]">
+        <div className="lg:col-span-1 h-full">
+          <UpcomingClassesWidget />
+        </div>
+        <div className="lg:col-span-2 h-full bg-white rounded-[var(--radius-card)] shadow-[var(--shadow-institutional)] border border-[var(--color-mist)] p-6">
+          <h3 className="text-lg font-bold text-[var(--color-ink)] mb-4">Pending Grading</h3>
+          <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-[var(--color-mist)] rounded-xl">
+             <p className="text-[var(--color-slate)] text-sm mb-2">You have 24 assessments waiting to be graded.</p>
+             <button className="text-[var(--color-phronesis-blue)] font-medium hover:underline">Go to Grading Inbox &rarr;</button>
+          </div>
         </div>
       </div>
     </div>

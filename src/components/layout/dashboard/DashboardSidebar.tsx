@@ -60,7 +60,7 @@ const CatalogIcon = () => (
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const { role } = useAuthStore();
+  const { role, user } = useAuthStore();
   const { isMobileSidebarOpen, closeMobileSidebar } = useUIStore();
   const [hasPendingApp, setHasPendingApp] = React.useState(false);
   
@@ -82,8 +82,24 @@ export function DashboardSidebar() {
     { name: 'Dashboard', href: `${basePath}/dashboard`, icon: <HomeIcon /> },
   ];
 
-  if (role === 'Teacher' && hasPendingApp) {
+  if (role === 'Teacher' && hasPendingApp && (user as any)?.verificationState !== 2) {
     navigation.push({ name: 'Application History', href: `${basePath}/dashboard?view=history`, icon: <HistoryIcon /> });
+  } else if (role === 'Teacher' && (user as any)?.verificationState === 2) {
+    navigation.push(
+      { name: 'My Classes', href: `${basePath}/classes`, icon: <UsersIcon /> },
+      { name: 'Grading', href: `${basePath}/grading`, icon: <ClipboardIcon /> },
+      { name: 'Content', href: `${basePath}/content`, icon: <CatalogIcon /> },
+      { name: 'Calendar', href: `${basePath}/calendar`, icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      )},
+      { name: 'Earnings', href: `${basePath}/earnings`, icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )}
+    );
   }
 
   if (role === 'Admin') {
@@ -93,8 +109,23 @@ export function DashboardSidebar() {
     );
   } else if (role === 'Learner') {
     navigation.push(
+      { name: 'My Progress', href: `${basePath}/progress`, icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+      )},
       { name: 'Explore Curriculum', href: `${basePath}/catalog`, icon: <CatalogIcon /> },
-      { name: 'My Profile', href: `${basePath}/profile`, icon: <UserIcon /> }
+      { name: 'Assessments', href: `${basePath}/assessments`, icon: <ClipboardIcon /> },
+      { name: 'My Calendar', href: `${basePath}/calendar`, icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      )},
+      { name: 'Support', href: `${basePath}/support`, icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      )}
     );
   } else {
     navigation.push(

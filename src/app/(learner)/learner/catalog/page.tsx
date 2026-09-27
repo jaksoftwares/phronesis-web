@@ -1,33 +1,56 @@
-import { Suspense } from 'react';
-import CatalogPage from './CatalogPage';
+'use client';
 
-export const metadata = {
-  title: 'Explore Curriculum | Phronesis',
-  description: 'Discover thousands of high-quality educational resources tailored to your learning level.',
-};
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { CatalogSidebar } from '@/components/learner/catalog/CatalogSidebar';
+import { CatalogContentArea } from '@/components/learner/catalog/CatalogContentArea';
 
-function CatalogSkeleton() {
+export default function CatalogPage() {
+  const [selectedGrade, setSelectedGrade] = useState('All Grades');
+  const [selectedSubject, setSelectedSubject] = useState('All Subjects');
+
   return (
-    <div className="min-h-screen bg-slate-50 animate-pulse">
-      <div className="bg-gradient-to-r from-[#163A5F] to-[#1cb5c5] h-44" />
-      <div className="max-w-7xl mx-auto px-8 py-8">
-        <div className="flex gap-8">
-          <div className="w-64 h-96 bg-slate-200 rounded-2xl" />
-          <div className="flex-1 grid grid-cols-4 gap-5">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="bg-slate-200 rounded-2xl h-56" />
-            ))}
-          </div>
-        </div>
+    <motion.div 
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+      }}
+      className="max-w-7xl mx-auto space-y-6 pb-12 flex flex-col h-[calc(100vh-6rem)]"
+    >
+      <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="shrink-0">
+        <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">Explore Curriculum</h1>
+        <p className="text-[var(--color-slate)] text-lg max-w-2xl">
+          Discover interactive video lessons, study materials, and assessments tailored to your grade.
+        </p>
+      </motion.div>
+
+      <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
+        {/* Left Sidebar - Filters */}
+        <motion.div 
+          variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
+          className="w-full lg:w-64 shrink-0"
+        >
+          <CatalogSidebar 
+            selectedGrade={selectedGrade}
+            setSelectedGrade={setSelectedGrade}
+            selectedSubject={selectedSubject}
+            setSelectedSubject={setSelectedSubject}
+          />
+        </motion.div>
+
+        {/* Main Content Area */}
+        <motion.div 
+          variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          className="flex-1 min-w-0"
+        >
+          <CatalogContentArea 
+            selectedGrade={selectedGrade}
+            selectedSubject={selectedSubject}
+          />
+        </motion.div>
       </div>
-    </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<CatalogSkeleton />}>
-      <CatalogPage />
-    </Suspense>
+    </motion.div>
   );
 }
