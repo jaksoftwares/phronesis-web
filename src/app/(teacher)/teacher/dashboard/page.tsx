@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import api from '@/lib/api/axios';
@@ -15,7 +15,7 @@ const STAGE_LABEL: Record<number, string> = {
   5: 'Approved', 6: 'Rejected',
 };
 
-export default function TeacherDashboard() {
+function TeacherDashboardContent() {
   const { user } = useAuthStore();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -315,5 +315,17 @@ export default function TeacherDashboard() {
 
 
     </div>
+  );
+}
+
+export default function TeacherDashboard() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-64 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#163A5F]" />
+      </div>
+    }>
+      <TeacherDashboardContent />
+    </Suspense>
   );
 }
