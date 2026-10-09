@@ -1,16 +1,39 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-
-const MOCK_INVOICES = [
-  { id: 'INV-2026-09', date: 'Sept 15, 2026', amount: '$149.00', status: 'Paid', plan: 'Family Premium' },
-  { id: 'INV-2026-08', date: 'Aug 15, 2026', amount: '$149.00', status: 'Paid', plan: 'Family Premium' },
-  { id: 'INV-2026-07', date: 'Jul 15, 2026', amount: '$149.00', status: 'Paid', plan: 'Family Premium' },
-];
+import api from '@/lib/api/axios';
 
 export default function GuardianBillingPage() {
-  return (
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleCheckout = async () => {
+    setIsProcessing(true);
+    try {
+      const res = await api.post('/payments/guardian/checkout');
+      alert(res.data?.message || 'Plan updated successfully!');
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to update plan.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const res = await api.get('/payments/guardian/invoices');
+        setInvoices(res.data?.data || []);
+      } catch (err) {
+        console.error('Failed to fetch invoices', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInvoices();
+  }, []);
     <motion.div 
       initial="hidden"
       animate="visible"
@@ -56,8 +79,12 @@ export default function GuardianBillingPage() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <button className="w-full py-2.5 bg-white text-[#163A5F] font-bold rounded-lg hover:bg-gray-100 transition-colors shadow-md">
-                  Change Plan
+                <button 
+                  onClick={handleCheckout}
+                  disabled={isProcessing}
+                  className="w-full py-2.5 bg-white text-[#163A5F] font-bold rounded-lg hover:bg-gray-100 transition-colors shadow-md disabled:opacity-50"
+                >
+                  {isProcessing ? 'Processing...' : 'Change Plan'}
                 </button>
                 <button className="w-full py-2.5 bg-transparent border border-white/30 text-white font-bold rounded-lg hover:bg-white/10 transition-colors">
                   Cancel Subscription
@@ -98,25 +125,31 @@ export default function GuardianBillingPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--color-mist)]">
-              {MOCK_INVOICES.map((inv) => (
-                <tr key={inv.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="p-4 font-semibold text-[var(--color-ink)]">{inv.id}</td>
-                  <td className="p-4 text-[var(--color-slate)] font-medium">{inv.date}</td>
-                  <td className="p-4 text-sm text-[var(--color-slate)]">{inv.plan}</td>
-                  <td className="p-4 font-bold text-[var(--color-ink)]">{inv.amount}</td>
-                  <td className="p-4">
-                    <span className="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wider rounded-full">
-                      {inv.status}
-                    </span>
-                  </td>
-                  <td className="p-4 text-right">
-                    <button className="text-[var(--color-phronesis-blue)] hover:underline text-sm font-semibold flex items-center justify-end gap-1 w-full">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                      PDF
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {loading ? (
+                <tr><td colSpan={6} className="p-4 text-center text-slate-500">Loading invoices...</td></tr>
+              ) : invoices.length === 0 ? (
+                <tr><td colSpan={6} className="p-4 text-center text-slate-500">No billing history found.</td></tr>
+              ) : (
+                invoices.map((inv) => (
+                  <tr key={inv.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="p-4 font-semibold text-[var(--color-ink)]">{inv.id}</td>
+                    <td className="p-4 text-[var(--color-slate)] font-medium">{inv.date}</td>
+                    <td className="p-4 text-sm text-[var(--color-slate)]">{inv.plan}</td>
+                    <td className="p-4 font-bold text-[var(--color-ink)]">{inv.amount}</td>
+                    <td className="p-4">
+                      <span className="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wider rounded-full">
+                        {inv.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <button className="text-[var(--color-phronesis-blue)] hover:underline text-sm font-semibold flex items-center justify-end gap-1 w-full">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        PDF
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </motion.div>

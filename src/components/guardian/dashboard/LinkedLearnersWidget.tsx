@@ -1,13 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import api from '@/lib/api/axios';
 
 export function LinkedLearnersWidget() {
-  const learners = [
-    { id: '1', name: 'Alex Mercer', grade: 'Grade 11', gpa: '3.8', status: 'In Class' },
-    { id: '2', name: 'Mia Mercer', grade: 'Grade 9', gpa: '3.9', status: 'Offline' }
-  ];
+  const [learners, setLearners] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLearners = async () => {
+      try {
+        const res = await api.get('/guardians/me/learners');
+        setLearners(res.data?.data || []);
+      } catch (err) {
+        console.error('Failed to fetch learners', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLearners();
+  }, []);
 
   return (
     <div className="bg-white rounded-[var(--radius-card)] p-6 shadow-sm border border-[var(--color-mist)] relative overflow-hidden group">
@@ -22,32 +35,37 @@ export function LinkedLearnersWidget() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {learners.map((l) => (
-          <div key={l.id} className="p-4 rounded-xl border border-[var(--color-mist)] bg-[#F5F7F9] hover:bg-white hover:border-[var(--color-phronesis-blue)] hover:shadow-md transition-all duration-300">
+        {loading ? (
+          <div className="col-span-2 text-center text-sm text-slate-500 py-4">Loading dependents...</div>
+        ) : learners.length === 0 ? (
+          <div className="col-span-2 text-center text-sm text-slate-500 py-4">No dependents linked.</div>
+        ) : (
+          learners.map((l, i) => (
+            <div key={l.learnerProfileId || i} className="p-4 rounded-xl border border-[var(--color-mist)] bg-[#F5F7F9] hover:bg-white hover:border-[var(--color-phronesis-blue)] hover:shadow-md transition-all duration-300">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-[var(--color-cloud)] border-2 border-white shadow-sm flex items-center justify-center relative">
-                <span className="font-bold text-[var(--color-slate)] text-lg">{l.name.charAt(0)}</span>
-                <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${l.status === 'In Class' ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+              <div className="w-14 h-14 rounded-full bg-[var(--color-cloud)] border-2 border-white shadow-sm flex items-center justify-center relative uppercase">
+                <span className="font-bold text-[var(--color-slate)] text-lg">{l.firstName?.charAt(0)}{l.lastName?.charAt(0)}</span>
+                <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white bg-green-500`}></span>
               </div>
               <div className="flex-1">
-                <h4 className="font-bold text-[var(--color-ink)]">{l.name}</h4>
-                <p className="text-xs text-[var(--color-slate)] font-medium">{l.grade}</p>
+                <h4 className="font-bold text-[var(--color-ink)]">{l.firstName} {l.lastName}</h4>
+                <p className="text-xs text-[var(--color-slate)] font-medium">Linked Dependent</p>
               </div>
             </div>
             
             <div className="mt-4 pt-4 border-t border-[var(--color-mist)] flex justify-between items-center">
               <div>
                 <p className="text-[10px] uppercase font-bold text-[var(--color-slate)] tracking-wider">Current GPA</p>
-                <p className="text-lg font-bold text-[var(--color-phronesis-teal)]">{l.gpa}</p>
+                <p className="text-lg font-bold text-[var(--color-phronesis-teal)]">--</p>
               </div>
-              <Link href={`/guardian/dependents/${l.id}`}>
+              <Link href={`/guardian/dashboard?learnerId=${l.learnerProfileId}`}>
                 <button className="px-4 py-1.5 text-xs font-bold text-[var(--color-phronesis-blue)] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
                   Report Card
                 </button>
               </Link>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

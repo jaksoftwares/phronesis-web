@@ -8,6 +8,10 @@ export default function AdminUsersManagement() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [roleFilter, setRoleFilter] = useState<string>('All');
+  
+  const [editingUser, setEditingUser] = useState<any>(null);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     fetchUsers(roleFilter);
@@ -33,6 +37,34 @@ export default function AdminUsersManagement() {
       fetchUsers(roleFilter);
     } catch (err) {
       console.error('Failed to toggle status', err);
+    }
+  };
+
+  const handleOpenRoleModal = (user: any) => {
+    setEditingUser(user);
+    setSelectedRoles(user.roles || []);
+  };
+
+  const handleUpdateRoles = async () => {
+    if (!editingUser) return;
+    setIsUpdating(true);
+    try {
+      await api.put(`/admin/users/${editingUser.id}/roles`, { roles: selectedRoles });
+      setEditingUser(null);
+      fetchUsers(roleFilter);
+    } catch (err) {
+      console.error('Failed to update roles', err);
+      alert('Failed to update roles.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const toggleRole = (role: string) => {
+    if (selectedRoles.includes(role)) {
+      setSelectedRoles(selectedRoles.filter(r => r !== role));
+    } else {
+      setSelectedRoles([...selectedRoles, role]);
     }
   };
 
@@ -103,7 +135,13 @@ export default function AdminUsersManagement() {
                         {u.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right space-x-2">
+                      <button 
+                        onClick={() => handleOpenRoleModal(u)}
+                        className="text-xs font-semibold px-3 py-1.5 rounded border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors"
+                      >
+                        Edit Roles
+                      </button>
                       {u.email !== 'admin@phronesis.com' && (
                         <button 
                           onClick={() => toggleStatus(u)}
@@ -124,6 +162,45 @@ export default function AdminUsersManagement() {
           </table>
         </div>
       </div>
+      {/* Role Management Modal */}
+      {editingUser && (
+        <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-sm p-6">
+            <h3 className="text-xl font-bold mb-4 text-[#163A5F]">Edit Roles</h3>
+            <p className="text-sm text-slate-500 mb-4">Editing roles for {editingUser.firstName} {editingUser.lastName}</p>
+            
+            <div className="space-y-3 mb-6">
+              {['Admin', 'Teacher', 'Learner', 'Guardian'].map(role => (
+                <label key={role} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={selectedRoles.includes(role)}
+                    onChange={() => toggleRole(role)}
+                    className="w-4 h-4 text-phronesis-blue rounded border-gray-300 focus:ring-phronesis-blue"
+                  />
+                  <span className="font-medium text-slate-700">{role}</span>
+                </label>
+              ))}
+            </div>
+            
+            <div className="flex justify-end space-x-3">
+              <button 
+                onClick={() => setEditingUser(null)} 
+                className="px-4 py-2 font-semibold text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleUpdateRoles} 
+                disabled={isUpdating}
+                className="px-4 py-2 font-semibold text-white bg-phronesis-blue hover:bg-opacity-90 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {isUpdating ? 'Saving...' : 'Save Roles'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
