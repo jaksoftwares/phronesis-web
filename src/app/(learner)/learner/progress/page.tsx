@@ -1,11 +1,37 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import api from '@/lib/api/axios';
 import { SubjectMasteryChart } from '@/components/learner/progress/SubjectMasteryChart';
 import { StudyTimeChart } from '@/components/learner/progress/StudyTimeChart';
 
 export default function ProgressPage() {
+  const [overview, setOverview] = useState({
+    assessmentsCompleted: 0,
+    totalTimeSpentHours: 0,
+    averageScorePercentage: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOverview = async () => {
+      try {
+        const res = await api.get('/analytics/overview');
+        setOverview({
+          assessmentsCompleted: res.data.data.assessmentsCompleted,
+          totalTimeSpentHours: res.data.data.totalTimeSpentHours,
+          averageScorePercentage: res.data.data.averageScorePercentage
+        });
+      } catch (err) {
+        console.error('Failed to load analytics overview', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOverview();
+  }, []);
+
   return (
     <motion.div 
       initial="hidden"
@@ -33,13 +59,12 @@ export default function ProgressPage() {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[var(--color-slate)] uppercase tracking-wider">Topics Completed</p>
-              <h4 className="text-3xl font-bold text-[var(--color-ink)]">42</h4>
+              <p className="text-sm font-semibold text-[var(--color-slate)] uppercase tracking-wider">Assessments Completed</p>
+              <h4 className="text-3xl font-bold text-[var(--color-ink)]">{loading ? '-' : overview.assessmentsCompleted}</h4>
             </div>
           </div>
           <div className="text-sm font-medium text-green-600 flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-            12% increase from last month
+            Keep up the great work!
           </div>
         </motion.div>
 
@@ -52,11 +77,11 @@ export default function ProgressPage() {
             </div>
             <div>
               <p className="text-sm font-semibold text-[var(--color-slate)] uppercase tracking-wider">Study Hours</p>
-              <h4 className="text-3xl font-bold text-[var(--color-ink)]">22.1<span className="text-lg text-[var(--color-slate)] font-medium ml-1">hrs</span></h4>
+              <h4 className="text-3xl font-bold text-[var(--color-ink)]">{loading ? '-' : overview.totalTimeSpentHours}<span className="text-lg text-[var(--color-slate)] font-medium ml-1">hrs</span></h4>
             </div>
           </div>
           <div className="text-sm font-medium text-[var(--color-slate)] flex items-center gap-1">
-            Across 7 days
+            Total time learning
           </div>
         </motion.div>
 
@@ -68,12 +93,12 @@ export default function ProgressPage() {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[var(--color-slate)] uppercase tracking-wider">Current Streak</p>
-              <h4 className="text-3xl font-bold text-[var(--color-ink)]">14<span className="text-lg text-[var(--color-slate)] font-medium ml-1">days</span></h4>
+              <p className="text-sm font-semibold text-[var(--color-slate)] uppercase tracking-wider">Average Score</p>
+              <h4 className="text-3xl font-bold text-[var(--color-ink)]">{loading ? '-' : overview.averageScorePercentage}<span className="text-lg text-[var(--color-slate)] font-medium ml-1">%</span></h4>
             </div>
           </div>
           <div className="text-sm font-medium text-[var(--color-phronesis-gold)] flex items-center gap-1">
-            Personal best!
+            Across all attempts
           </div>
         </motion.div>
       </div>

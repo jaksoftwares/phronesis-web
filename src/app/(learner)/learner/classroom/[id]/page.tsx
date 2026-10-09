@@ -1,13 +1,44 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import api from '@/lib/api/axios';
 
 export default function LiveClassroomPage() {
+  const { id } = useParams();
+  const router = useRouter();
+  
   const [isMicOn, setIsMicOn] = useState(false);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [activeTab, setActiveTab] = useState<'Chat' | 'Participants'>('Chat');
+  const [sessionData, setSessionData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const joinSession = async () => {
+      try {
+        const res = await api.post(`/sessions/${id}/join`);
+        setSessionData(res.data.data);
+      } catch (err) {
+        console.error('Failed to join session', err);
+        alert('Could not join session. It may have ended or does not exist.');
+        router.push('/learner/calendar');
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (id) joinSession();
+  }, [id, router]);
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-[#0F172A] z-50 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-[#0F172A] z-50 flex flex-col font-sans">
@@ -20,16 +51,18 @@ export default function LiveClassroomPage() {
             </svg>
           </div>
           <div>
-            <h1 className="text-white font-bold text-lg leading-tight">Biology: Cell Structure</h1>
-            <p className="text-white/60 text-xs font-medium">Dr. Eleanor Vance • 12 Participants</p>
+            <h1 className="text-white font-bold text-lg leading-tight">{sessionData?.title || 'Live Classroom'}</h1>
+            <p className="text-white/60 text-xs font-medium">{sessionData?.hostName || 'Instructor'} • 12 Participants</p>
           </div>
         </div>
         
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 bg-red-500/20 text-red-500 text-xs font-bold uppercase tracking-wider rounded-md border border-red-500/50 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-            REC
-          </span>
+          {sessionData?.isLive && (
+            <span className="px-3 py-1 bg-red-500/20 text-red-500 text-xs font-bold uppercase tracking-wider rounded-md border border-red-500/50 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+              LIVE
+            </span>
+          )}
           <span className="px-3 py-1 bg-green-500/20 text-green-500 text-xs font-bold uppercase tracking-wider rounded-md border border-green-500/50 flex items-center gap-2 ml-2">
             Secure Connection
           </span>
@@ -53,8 +86,10 @@ export default function LiveClassroomPage() {
             
             {/* Teacher Nametag */}
             <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20">
-              <div className="w-6 h-6 rounded-full bg-[var(--color-phronesis-gold)] flex items-center justify-center text-xs font-bold text-[#163A5F]">T</div>
-              <span className="text-white text-sm font-medium">Dr. Eleanor Vance (Host)</span>
+              <div className="w-6 h-6 rounded-full bg-[var(--color-phronesis-gold)] flex items-center justify-center text-xs font-bold text-[#163A5F]">
+                {sessionData?.hostName?.[0] || 'I'}
+              </div>
+              <span className="text-white text-sm font-medium">{sessionData?.hostName || 'Instructor'} (Host)</span>
             </div>
 
             {/* Anti-Piracy Watermark overlay */}

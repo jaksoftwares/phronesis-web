@@ -1,66 +1,44 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import api from '@/lib/api/axios';
 import { QuizItem, QuizCard } from '@/components/learner/assessments/QuizCard';
-
-const MOCK_QUIZZES: QuizItem[] = [
-  {
-    id: 'q1',
-    title: 'Algebra: Linear Equations & Inequalities',
-    subject: 'Mathematics',
-    type: 'Topical Quiz',
-    duration: 30,
-    totalQuestions: 15,
-    status: 'Pending'
-  },
-  {
-    id: 'q2',
-    title: 'Mid-Term Mock Exam: Combined Sciences',
-    subject: 'Science',
-    type: 'Mock Exam',
-    duration: 120,
-    totalQuestions: 60,
-    status: 'Pending'
-  },
-  {
-    id: 'q3',
-    title: 'Essay Assignment: Themes in Shakespeare',
-    subject: 'English',
-    type: 'Assignment',
-    duration: 90,
-    totalQuestions: 3,
-    status: 'Pending'
-  },
-  {
-    id: 'q4',
-    title: 'Trigonometry Fundamentals',
-    subject: 'Mathematics',
-    type: 'Topical Quiz',
-    duration: 45,
-    totalQuestions: 20,
-    status: 'Completed',
-    score: 85
-  },
-  {
-    id: 'q5',
-    title: 'World War II Timeline Assessment',
-    subject: 'History',
-    type: 'Topical Quiz',
-    duration: 25,
-    totalQuestions: 10,
-    status: 'Completed',
-    score: 100
-  }
-];
 
 export default function AssessmentsPage() {
   const [filter, setFilter] = useState<'All' | 'Pending' | 'Completed'>('All');
+  const [quizzes, setQuizzes] = useState<QuizItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredQuizzes = MOCK_QUIZZES.filter(q => filter === 'All' || q.status === filter);
+  useEffect(() => {
+    const fetchAssessments = async () => {
+      try {
+        const res = await api.get('/assessments');
+        // Map the backend structure to the frontend QuizItem structure if needed
+        const data = res.data?.data?.map((a: any) => ({
+          id: a.id,
+          title: a.title,
+          subject: a.subject || 'General',
+          type: a.type,
+          duration: a.duration,
+          totalQuestions: a.totalQuestions,
+          status: a.status,
+          score: a.score
+        })) || [];
+        setQuizzes(data);
+      } catch (err) {
+        console.error('Failed to load assessments', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAssessments();
+  }, []);
+
+  const filteredQuizzes = quizzes.filter(q => filter === 'All' || q.status === filter);
   
-  const pendingCount = MOCK_QUIZZES.filter(q => q.status === 'Pending').length;
-  const completedCount = MOCK_QUIZZES.filter(q => q.status === 'Completed').length;
+  const pendingCount = quizzes.filter(q => q.status === 'Pending').length;
+  const completedCount = quizzes.filter(q => q.status === 'Completed').length;
 
   return (
     <motion.div 

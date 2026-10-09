@@ -1,22 +1,49 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import api from '@/lib/api/axios';
 
 export default function CalendarPage() {
   const [view, setView] = useState<'Day' | 'Week' | 'Month'>('Week');
+  const [events, setEvents] = useState<any[]>([]);
 
   const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const TIME_SLOTS = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
 
-  const MOCK_EVENTS = [
-    { id: 'e1', title: 'Mathematics: Algebra II', type: 'Live Class', day: 'Mon', time: '09:00', duration: 2, isNow: false },
-    { id: 'e2', title: 'English Essay Draft Due', type: 'Deadline', day: 'Mon', time: '14:00', duration: 1, isNow: false },
-    { id: 'e3', title: 'Biology: Cell Structure', type: 'Live Class', day: 'Wed', time: '10:00', duration: 1.5, isNow: true },
-    { id: 'e4', title: 'History Group Discussion', type: 'Live Class', day: 'Thu', time: '13:00', duration: 1, isNow: false },
-    { id: 'e5', title: 'Physics Quiz', type: 'Assessment', day: 'Fri', time: '11:00', duration: 1, isNow: false },
-  ];
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await api.get('/me/bookings');
+        
+        // Map backend ClassSessions to frontend MOCK_EVENTS format
+        const mapped = (res.data?.data || []).map((session: any) => {
+          const startDate = new Date(session.startTime);
+          const endDate = new Date(session.endTime);
+          
+          const dayStr = startDate.toLocaleDateString('en-US', { weekday: 'short' });
+          const timeStr = startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+          const durationHours = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60);
+
+          return {
+            id: session.id,
+            title: session.title,
+            type: 'Live Class',
+            day: dayStr,
+            time: timeStr,
+            duration: durationHours,
+            isNow: session.isLive
+          };
+        });
+        
+        setEvents(mapped);
+      } catch (err) {
+        console.error('Failed to load bookings', err);
+      }
+    };
+    fetchBookings();
+  }, []);
 
   return (
     <motion.div 
@@ -105,7 +132,7 @@ export default function CalendarPage() {
 
                   {/* Events Overlay */}
                   <div className="absolute top-12 left-0 w-full h-[calc(100%-3rem)] pointer-events-none p-1">
-                    {MOCK_EVENTS.filter(e => e.day === day).map(event => {
+                    {events.filter((e: any) => e.day === day).map((event: any) => {
                       const startIndex = TIME_SLOTS.indexOf(event.time);
                       const top = startIndex * 6; // 6rem per hour (96px)
                       const height = event.duration * 6;

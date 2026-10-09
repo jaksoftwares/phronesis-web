@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { ContentCard } from './ContentCard';
 
 interface ContentItem {
@@ -49,6 +50,8 @@ export default function ContentGrid({
   currentPage,
   onPageChange,
 }: ContentGridProps) {
+  const router = useRouter();
+
   if (loading) {
     return (
       <div>
@@ -81,7 +84,7 @@ export default function ContentGrid({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {items.map((item) => (
-          <ContentCard key={item.id} item={item as any} onClick={() => {}} />
+          <ContentCard key={item.id} item={item as any} onClick={() => router.push(`/learner/catalog/${item.id}`)} />
         ))}
       </div>
 

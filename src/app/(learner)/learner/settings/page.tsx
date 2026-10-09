@@ -45,6 +45,20 @@ export default function SettingsPage() {
       </motion.div>
 
       <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white rounded-xl shadow-[var(--shadow-institutional)] border border-[var(--color-mist)] p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-[var(--color-ink)]">Subscription & Billing</h2>
+          <span className="px-3 py-1 bg-blue-100 text-blue-700 font-bold text-xs rounded-full uppercase tracking-wider">Plan Management</span>
+        </div>
+        <p className="text-slate-600 mb-6">Manage your premium access and subscription packages here.</p>
+        <button 
+          onClick={() => window.location.href = '/learner/subscription'}
+          className="w-full md:w-auto px-6 py-3 bg-[var(--color-phronesis-gold)] text-white rounded-lg font-bold hover:bg-opacity-90 transition-colors shadow-md"
+        >
+          View Subscription Plans
+        </button>
+      </motion.div>
+
+      <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white rounded-xl shadow-[var(--shadow-institutional)] border border-[var(--color-mist)] p-6">
         <h2 className="text-xl font-bold text-[var(--color-ink)] mb-6">Notifications</h2>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
