@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { useAuthStore } from '@/store/authStore';
 import api from '@/lib/api/axios';
 import { TeacherMetricsWidget } from '@/components/teacher/dashboard/TeacherMetricsWidget';
@@ -21,6 +22,7 @@ function TeacherDashboardContent() {
   const searchParams = useSearchParams();
   const [profile, setProfile] = useState<any>(null);
   const [application, setApplication] = useState<any>(null);
+  const [dashboardData, setDashboardData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showStatusView, setShowStatusView] = useState(false);
 
@@ -38,6 +40,12 @@ function TeacherDashboardContent() {
       try {
         const profRes = await api.get('/teachers/' + user.id + '/profile');
         setProfile(profRes.data?.data);
+        
+        if (profRes.data?.data?.verificationState === 2) {
+          const dashRes = await api.get('/teachers/me/dashboard');
+          setDashboardData(dashRes.data?.data);
+        }
+
         try {
           const appRes = await api.get('/teacher-onboarding/me/application');
           setApplication(appRes.data?.data);
@@ -73,17 +81,19 @@ function TeacherDashboardContent() {
         </button>
       </div>
 
-      <TeacherMetricsWidget />
+      <TeacherMetricsWidget metrics={dashboardData?.metrics} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[400px]">
         <div className="lg:col-span-1 h-full">
-          <UpcomingClassesWidget />
+          <UpcomingClassesWidget classes={dashboardData?.upcomingClasses} />
         </div>
         <div className="lg:col-span-2 h-full bg-white rounded-[var(--radius-card)] shadow-[var(--shadow-institutional)] border border-[var(--color-mist)] p-6">
           <h3 className="text-lg font-bold text-[var(--color-ink)] mb-4">Pending Grading</h3>
           <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-[var(--color-mist)] rounded-xl">
-             <p className="text-[var(--color-slate)] text-sm mb-2">You have 24 assessments waiting to be graded.</p>
-             <button className="text-[var(--color-phronesis-blue)] font-medium hover:underline">Go to Grading Inbox &rarr;</button>
+             <p className="text-[var(--color-slate)] text-sm mb-2">You have {dashboardData?.metrics?.pendingGrading || 0} assessments waiting to be graded.</p>
+             <Link href="/teacher/grading">
+               <button className="text-[var(--color-phronesis-blue)] font-medium hover:underline">Go to Grading Inbox &rarr;</button>
+             </Link>
           </div>
         </div>
       </div>

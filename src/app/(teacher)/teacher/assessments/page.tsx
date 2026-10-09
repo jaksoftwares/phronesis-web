@@ -1,16 +1,35 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-
-const MOCK_ASSESSMENTS = [
-  { id: 'a1', title: 'Mid-Term Mock Exam', subject: 'Physics', class: 'Grade 11 Alpha', dueDate: 'Sept 30, 2026', completionRate: 85, avgScore: 78, status: 'Active' },
-  { id: 'a2', title: 'Algebra: Linear Equations Quiz', subject: 'Mathematics', class: 'Grade 9 Beta', dueDate: 'Sept 25, 2026', completionRate: 100, avgScore: 88, status: 'Completed' },
-  { id: 'a3', title: 'Cellular Respiration Lab Report', subject: 'Biology', class: 'Grade 10 Science', dueDate: 'Oct 05, 2026', completionRate: 20, avgScore: null, status: 'Active' },
-];
+import api from '@/lib/api/axios';
 
 export default function TeacherAssessmentsPage() {
+  const [assessments, setAssessments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get('/assessments/teacher/me');
+        setAssessments(res.data?.data || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#163A5F]" />
+      </div>
+    );
+  }
+
   return (
     <motion.div 
       initial="hidden"
@@ -89,14 +108,14 @@ export default function TeacherAssessmentsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--color-mist)]">
-              {MOCK_ASSESSMENTS.map((assessment) => (
+              {assessments.map((assessment) => (
                 <tr key={assessment.id} className="hover:bg-gray-50 transition-colors">
                   <td className="p-4">
                     <p className="font-bold text-[var(--color-ink)]">{assessment.title}</p>
                     <p className="text-xs text-[var(--color-slate)]">{assessment.subject}</p>
                   </td>
                   <td className="p-4 text-sm font-medium text-[var(--color-slate)]">
-                    {assessment.class}
+                    {assessment.assignedClass}
                   </td>
                   <td className="p-4 text-sm font-semibold text-[var(--color-ink)]">
                     {assessment.dueDate}

@@ -77,10 +77,11 @@ export default function ContentDetailsPage() {
     }
     // Open secure player
     const primary = content?.attachments.find(a => a.isPrimary);
-    if (primary?.fileUri) {
+    if (primary?.fileUri && content) {
+      const labels: Record<number, string> = { 0: 'Document', 1: 'Video', 2: 'Interactive', 3: 'Audio', 4: 'Simulation' };
       setPlayerConfig({ 
         uri: primary.fileUri, 
-        type: contentTypeLabels[content.contentType] || 'Document' 
+        type: labels[content.contentType] || 'Document' 
       });
       setIsPlayerOpen(true);
     } else {

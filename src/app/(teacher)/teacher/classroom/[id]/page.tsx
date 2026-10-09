@@ -1,15 +1,31 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import api from '@/lib/api/axios';
+import { useParams } from 'next/navigation';
 
 export default function TeacherLiveClassroomPage() {
+  const params = useParams();
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [isRecording, setIsRecording] = useState(true);
   const [activeTab, setActiveTab] = useState<'Chat' | 'Participants'>('Participants');
+  
+  const [sessionInfo, setSessionInfo] = useState<any>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.post(`/sessions/${params.id}/join`);
+        setSessionInfo(res.data?.data);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [params.id]);
 
   return (
     <div className="fixed inset-0 bg-[#0F172A] z-50 flex flex-col font-sans">
@@ -22,7 +38,7 @@ export default function TeacherLiveClassroomPage() {
             </svg>
           </div>
           <div>
-            <h1 className="text-white font-bold text-lg leading-tight">Advanced Chemistry (Host View)</h1>
+            <h1 className="text-white font-bold text-lg leading-tight">{sessionInfo?.title || 'Loading Session...'} (Host View)</h1>
             <p className="text-[var(--color-phronesis-gold)] text-xs font-medium">12 Students in Session</p>
           </div>
         </div>

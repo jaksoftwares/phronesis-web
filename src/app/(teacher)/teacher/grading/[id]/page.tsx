@@ -4,8 +4,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/api/axios';
 
-export default function GradingEvaluationPage() {
+export default function GradingEvaluationPage({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   return (
@@ -143,7 +144,14 @@ export default function GradingEvaluationPage() {
               Save Draft
             </button>
             <button 
-              onClick={() => router.back()}
+              onClick={async () => {
+                try {
+                  await api.post(`/grading/submissions/${params.id}/grade`, { score: 65, feedback: "Great work!" });
+                  router.push('/teacher/grading');
+                } catch (err) {
+                  console.error(err);
+                }
+              }}
               className="flex-1 py-3 bg-[var(--color-phronesis-teal)] text-white font-bold rounded-lg hover:bg-opacity-90 transition-colors shadow-md"
             >
               Publish Grade

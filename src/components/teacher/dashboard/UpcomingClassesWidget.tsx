@@ -4,12 +4,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-export function UpcomingClassesWidget() {
-  const classes = [
-    { id: 'c1', title: 'A-Level Mathematics', topic: 'Integration Techniques', time: '10:00 AM', duration: '90m', students: 24, isLive: true },
-    { id: 'c2', title: 'O-Level Physics', topic: 'Kinematics', time: '01:00 PM', duration: '60m', students: 18, isLive: false },
-    { id: 'c3', title: 'Advanced Chemistry', topic: 'Organic Synthesis', time: '03:30 PM', duration: '60m', students: 12, isLive: false },
-  ];
+export function UpcomingClassesWidget({ classes: serverClasses }: { classes?: any[] }) {
+  const classes = serverClasses || [];
 
   return (
     <div className="bg-white rounded-[var(--radius-card)] shadow-[var(--shadow-institutional)] border border-[var(--color-mist)] flex flex-col h-full overflow-hidden">

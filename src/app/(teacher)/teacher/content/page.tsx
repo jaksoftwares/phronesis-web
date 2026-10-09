@@ -1,26 +1,42 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-
-const MOCK_CONTENT = [
-  { id: '1', title: 'Algebra II: Matrices Overview', type: 'PDF Document', subject: 'Mathematics', views: 45, date: 'Sept 10, 2026', status: 'Published' },
-  { id: '2', title: 'Cellular Respiration Lab Guide', type: 'Assignment', subject: 'Biology', views: 112, date: 'Sept 12, 2026', status: 'Published' },
-  { id: '3', title: 'Mid-Term Mock Exam', type: 'Quiz', subject: 'Physics', views: 0, date: 'Sept 15, 2026', status: 'Draft' },
-  { id: '4', title: 'Introduction to Shakespeare', type: 'Video', subject: 'English', views: 89, date: 'Sept 20, 2026', status: 'Published' },
-  { id: '5', title: 'WWII Timeline Interactive', type: 'Interactive', subject: 'History', views: 34, date: 'Sept 22, 2026', status: 'Published' },
-];
+import api from '@/lib/api/axios';
 
 export default function ContentManagerPage() {
   const [filter, setFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [contentList, setContentList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredContent = MOCK_CONTENT.filter(c => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get('/content/me');
+        setContentList(res.data?.data || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const filteredContent = contentList.filter(c => {
     const matchesFilter = filter === 'All' || c.type.includes(filter) || (filter === 'Assessments' && (c.type === 'Quiz' || c.type === 'Assignment'));
     const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#163A5F]" />
+      </div>
+    );
+  }
 
   return (
     <motion.div 

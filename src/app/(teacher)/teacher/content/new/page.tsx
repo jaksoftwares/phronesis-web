@@ -1,34 +1,77 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/api/axios';
 
 export default function NewContentPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [contentType, setContentType] = useState<'Document' | 'Video' | 'Quiz' | null>(null);
+  const [contentType, setContentType] = useState<string | null>(null);
 
-  const handleNext = () => {
-    if (step === 1 && !contentType) return;
-    if (step < 3) setStep(s => s + 1);
-    else router.push('/teacher/content'); // simulate publish
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [subjectId, setSubjectId] = useState('');
+  const [gradeId, setGradeId] = useState('');
+  
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [grades, setGrades] = useState<any[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [subRes, gradeRes] = await Promise.all([
+          api.get('/academic/subjects'),
+          api.get('/academic/grades')
+        ]);
+        setSubjects(subRes.data?.data || []);
+        setGrades(gradeRes.data?.data || []);
+        if (subRes.data?.data?.length > 0) setSubjectId(subRes.data.data[0].id);
+        if (gradeRes.data?.data?.length > 0) setGradeId(gradeRes.data.data[0].id);
+      } catch (err) {
+        console.error("Failed to load metadata", err);
+      }
+    })();
+  }, []);
+
+  const handleNext = async () => {
+    if (step === 1 && contentType === null) return;
+    if (step === 2 && (!title || !description)) return; // basic validation
+    
+    if (step === 3) {
+      // Publish
+      setIsSubmitting(true);
+      try {
+        await api.post('/content', {
+          title,
+          description,
+          version: "1.0",
+          isPremium: false,
+          contentType: contentType === 'Document' ? 1 : contentType === 'Quiz' ? 2 : 0,
+          gradeLevelId: gradeId,
+          subjectId: subjectId,
+          strandId: null,
+          subStrandId: null,
+          learningObjectiveId: null,
+          tags: []
+        });
+        router.push('/teacher/content');
+      } catch (err) {
+        console.error("Failed to create content", err);
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+    
+    setStep(s => s + 1);
   };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-12 pt-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={() => router.back()} className="p-2 -ml-2 text-[var(--color-slate)] hover:bg-[var(--color-cloud)] rounded-lg transition-colors">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-        </button>
-        <div>
-          <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-1">Create New Content</h1>
-          <p className="text-[var(--color-slate)] text-sm">Add materials or assessments to the curriculum.</p>
-        </div>
-      </div>
-
       {/* Progress Stepper */}
       <div className="flex items-center justify-between mb-8 relative">
         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-gray-200 -z-10 rounded-full"></div>
@@ -106,27 +149,27 @@ export default function NewContentPage() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-[var(--color-slate)] mb-1">Title</label>
-                  <input type="text" placeholder="e.g. Introduction to Algebra" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)]" />
+                  <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Introduction to Algebra" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)]" />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-[var(--color-slate)] mb-1">Subject</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)] bg-white">
-                      <option>Mathematics</option><option>Physics</option><option>Biology</option>
+                    <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)] bg-white">
+                      {subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-[var(--color-slate)] mb-1">Grade Level</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)] bg-white">
-                      <option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option>
+                    <select value={gradeId} onChange={(e) => setGradeId(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)] bg-white">
+                      {grades.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
                     </select>
                   </div>
                 </div>
                 
                 <div>
                   <label className="block text-sm font-semibold text-[var(--color-slate)] mb-1">Description</label>
-                  <textarea rows={3} placeholder="Brief summary of the content..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)] resize-none" />
+                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Brief summary of the content..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--color-phronesis-blue)] resize-none" />
                 </div>
 
                 {/* Conditional UI based on type */}

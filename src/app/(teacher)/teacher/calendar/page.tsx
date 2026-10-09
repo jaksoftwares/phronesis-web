@@ -1,21 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import api from '@/lib/api/axios';
 
 export default function TeacherCalendarPage() {
   const [view, setView] = useState<'Day' | 'Week' | 'Month'>('Week');
+  const [events, setEvents] = useState<any[]>([]);
 
   const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const TIME_SLOTS = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
 
-  const MOCK_EVENTS = [
-    { id: 'e1', title: 'A-Level Mathematics', type: 'Class', day: 'Mon', time: '10:00', duration: 1.5, students: 24 },
-    { id: 'e2', title: 'O-Level Physics', type: 'Class', day: 'Tue', time: '13:00', duration: 1, students: 18 },
-    { id: 'e3', title: 'Advanced Chemistry', type: 'Class', day: 'Wed', time: '15:30', duration: 1, students: 12 },
-    { id: 'e4', title: '1-on-1: Sarah Connor', type: 'Tutoring', day: 'Thu', time: '14:00', duration: 0.5, students: 1 },
-    { id: 'e5', title: 'Office Hours', type: 'Availability', day: 'Fri', time: '14:00', duration: 2, students: 0 },
-  ];
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get('/teachers/me/schedule');
+        setEvents(res.data?.data || []);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <motion.div 
@@ -111,7 +116,7 @@ export default function TeacherCalendarPage() {
 
                   {/* Events Overlay */}
                   <div className="absolute top-12 left-0 w-full h-[calc(100%-3rem)] pointer-events-none p-1">
-                    {MOCK_EVENTS.filter(e => e.day === day).map(event => {
+                    {events.filter(e => e.day === day).map(event => {
                       // Custom offset calculation based on string e.g. '15:30'
                       const [hourStr, minStr] = event.time.split(':');
                       const hourOffset = parseInt(hourStr) - 8; // Since grid starts at 08:00
@@ -126,6 +131,7 @@ export default function TeacherCalendarPage() {
                       return (
                         <div 
                           key={event.id}
+                          onClick={() => window.location.href = `/teacher/classroom/${event.id}`}
                           className={`absolute w-[calc(100%-8px)] left-1 p-2 rounded-md shadow-sm pointer-events-auto overflow-hidden flex flex-col justify-between transition-transform hover:scale-[1.02] cursor-pointer ${bgColor} text-white`}
                           style={{ top: `${top}rem`, height: `${height}rem` }}
                         >

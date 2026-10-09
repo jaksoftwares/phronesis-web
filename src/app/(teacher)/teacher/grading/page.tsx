@@ -1,21 +1,37 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-
-const MOCK_SUBMISSIONS = [
-  { id: 's1', studentName: 'Alex Mercer', assignmentTitle: 'Algebra: Linear Equations Quiz', submittedAt: '2 hours ago', status: 'Pending', score: null },
-  { id: 's2', studentName: 'Sarah Connor', assignmentTitle: 'Essay: Themes in Shakespeare', submittedAt: '5 hours ago', status: 'Pending', score: null },
-  { id: 's3', studentName: 'John Doe', assignmentTitle: 'Mid-Term Mock Exam', submittedAt: '1 day ago', status: 'Pending', score: null },
-  { id: 's4', studentName: 'Jane Smith', assignmentTitle: 'Algebra: Linear Equations Quiz', submittedAt: '2 days ago', status: 'Graded', score: '85/100' },
-  { id: 's5', studentName: 'Michael Chang', assignmentTitle: 'Physics: Kinematics Lab', submittedAt: '3 days ago', status: 'Graded', score: '92/100' },
-];
+import api from '@/lib/api/axios';
 
 export default function GradingInboxPage() {
   const [filter, setFilter] = useState<'Pending' | 'Graded'>('Pending');
+  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredSubmissions = MOCK_SUBMISSIONS.filter(sub => sub.status === filter);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get('/grading/inbox');
+        setSubmissions(res.data?.data || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const filteredSubmissions = submissions.filter(sub => sub.status === filter);
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#163A5F]" />
+      </div>
+    );
+  }
 
   return (
     <motion.div 
@@ -70,7 +86,7 @@ export default function GradingInboxPage() {
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-[var(--color-mist)] flex items-center justify-center font-bold text-[var(--color-slate)]">
-                    {sub.studentName.split(' ').map(n => n[0]).join('')}
+                    {sub.studentName.split(' ').map((n: string) => n[0]).join('')}
                   </div>
                   <div>
                     <h3 className="font-bold text-[var(--color-ink)] text-lg">{sub.assignmentTitle}</h3>

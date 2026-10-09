@@ -1,15 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import api from '@/lib/api/axios';
 
 export default function TeacherClassesPage() {
-  const mockClasses = [
-    { id: '1', name: 'Grade 11 Alpha - Physics', students: 24, schedule: 'Mon/Wed 10:00 AM' },
-    { id: '2', name: 'Grade 9 Beta - Mathematics', students: 18, schedule: 'Tue/Thu 1:00 PM' },
-    { id: '3', name: 'Grade 10 Science - Biology', students: 30, schedule: 'Fri 9:00 AM' },
-  ];
+  const [classes, setClasses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get('/teachers/me/classes');
+        setClasses(res.data?.data || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#163A5F]" />
+      </div>
+    );
+  }
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto space-y-8 pb-12 pt-6">
@@ -21,7 +40,7 @@ export default function TeacherClassesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockClasses.map(cls => (
+        {classes.map(cls => (
           <div key={cls.id} className="bg-white rounded-xl shadow-[var(--shadow-institutional)] border border-[var(--color-mist)] p-6">
             <h2 className="text-xl font-bold text-[var(--color-ink)] mb-2">{cls.name}</h2>
             <div className="flex items-center gap-4 text-sm text-[var(--color-slate)] mb-6">
@@ -29,7 +48,11 @@ export default function TeacherClassesPage() {
               <span className="flex items-center gap-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {cls.schedule}</span>
             </div>
             <div className="flex gap-3">
-              <button className="flex-1 py-2 bg-[var(--color-phronesis-blue)] text-white font-medium rounded-lg hover:bg-opacity-90 transition-colors">View Roster</button>
+              <Link href={`/teacher/classes/${cls.id}`} className="flex-1">
+                <button className="w-full py-2 bg-[var(--color-phronesis-blue)] text-white font-medium rounded-lg hover:bg-opacity-90 transition-colors">
+                  View Roster
+                </button>
+              </Link>
               <Link href={`/teacher/classroom/${cls.id}`} className="flex-1"><button className="w-full py-2 bg-white border border-[var(--color-mist)] text-[var(--color-ink)] font-medium rounded-lg hover:bg-gray-50 transition-colors">Go Live</button></Link>
             </div>
           </div>

@@ -1,15 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-
-const MOCK_LEDGER = [
-  { id: 'tx1', date: 'Sept 15, 2026', description: 'Bi-Weekly Payout (Sept 1 - Sept 14)', hours: 42, rate: '$45/hr', amount: '$1,890.00', status: 'Paid' },
-  { id: 'tx2', date: 'Aug 31, 2026', description: 'Bi-Weekly Payout (Aug 15 - Aug 30)', hours: 38, rate: '$45/hr', amount: '$1,710.00', status: 'Paid' },
-  { id: 'tx3', date: 'Aug 15, 2026', description: 'Bi-Weekly Payout (Aug 1 - Aug 14)', hours: 45, rate: '$45/hr', amount: '$2,025.00', status: 'Paid' },
-];
+import api from '@/lib/api/axios';
 
 export default function EarningsPage() {
+  const [earnings, setEarnings] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get('/teachers/me/earnings');
+        setEarnings(res.data?.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  if (loading || !earnings) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#163A5F]" />
+      </div>
+    );
+  }
+
   return (
     <motion.div 
       initial="hidden"
@@ -41,8 +60,8 @@ export default function EarningsPage() {
         <div className="bg-gradient-to-br from-[#163A5F] to-[#112a45] rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
           <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-2 relative z-10">Pending Next Payout</h3>
-          <p className="text-4xl font-bold mb-1 relative z-10">$845.00</p>
-          <p className="text-sm text-white/70 relative z-10">For Sept 15 - Present (18.5 hours)</p>
+          <p className="text-4xl font-bold mb-1 relative z-10">${earnings.balance.toFixed(2)}</p>
+          <p className="text-sm text-white/70 relative z-10">For Sept 15 - Present</p>
           
           <div className="mt-6 pt-4 border-t border-white/20 flex justify-between items-center relative z-10">
             <span className="text-sm font-medium">Scheduled for:</span>
@@ -57,7 +76,7 @@ export default function EarningsPage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <h3 className="text-sm font-semibold text-[var(--color-slate)] uppercase tracking-wider mb-1">Total Earned (YTD)</h3>
-            <p className="text-3xl font-bold text-[var(--color-ink)]">$24,650.00</p>
+            <p className="text-3xl font-bold text-[var(--color-ink)]">${earnings.ytdEarnings.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
           </div>
           <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-green-600 bg-green-50 px-3 py-1.5 rounded-lg w-max">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
@@ -72,7 +91,7 @@ export default function EarningsPage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <h3 className="text-sm font-semibold text-[var(--color-slate)] uppercase tracking-wider mb-1">Base Hourly Rate</h3>
-            <p className="text-3xl font-bold text-[var(--color-ink)]">$45.00<span className="text-lg text-[var(--color-slate)] font-medium">/hr</span></p>
+            <p className="text-3xl font-bold text-[var(--color-ink)]">${earnings.hourlyRate.toFixed(2)}<span className="text-lg text-[var(--color-slate)] font-medium">/hr</span></p>
           </div>
           <p className="mt-4 text-sm text-[var(--color-slate)]">
             Rate based on Tier 2 Instructor status. Next tier review in 45 days.
@@ -108,7 +127,7 @@ export default function EarningsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--color-mist)]">
-              {MOCK_LEDGER.map((tx) => (
+              {earnings.ledger.map((tx: any) => (
                 <tr key={tx.id} className="hover:bg-gray-50 transition-colors">
                   <td className="p-4 font-semibold text-[var(--color-ink)]">{tx.date}</td>
                   <td className="p-4 text-[var(--color-slate)] text-sm">{tx.description}</td>
